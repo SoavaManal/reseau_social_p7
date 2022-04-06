@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "Manal1991/",
+    "database": "database_development_projet7",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "Manal1991/",
+    "database": "database_test_projet7",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "Manal1991/",
+    "database": "database_production_projet7",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
