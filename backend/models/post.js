@@ -4,10 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   var post = sequelize.define(
     "post",
     {
-      user_id: DataTypes.INTEGER,
       content: DataTypes.STRING,
       image_url: DataTypes.STRING,
-      date: DataTypes.DATE,
     },
     {
       classMethods: {

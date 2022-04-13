@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
 
+const path = require("path");
+
 const userRouter = require("./routes/user");
+const postRouter = require("./routes/post");
+const commentRouter = require("./routes/comment");
 
 const dotenv = require("dotenv");
 dotenv.config(); //utiliser dotenv "acceder aux varriables d'environnement"
@@ -21,7 +25,9 @@ app.use((req, res, next) => {
   );
   next();
 });
-
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRouter);
+app.use("/api/posts", postRouter);
+app.use("/api/comments", commentRouter);
 
 module.exports = app;
