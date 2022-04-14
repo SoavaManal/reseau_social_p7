@@ -4,11 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   var comment = sequelize.define(
     "comment",
     {
-      user_id: DataTypes.INTEGER,
-      post_id: DataTypes.INTEGER,
       content: DataTypes.TEXT,
       image_url: DataTypes.STRING,
-      date: DataTypes.DATE,
     },
     {
       classMethods: {

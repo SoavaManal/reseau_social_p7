@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      user_id: {
+      userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -16,7 +16,7 @@ module.exports = {
           key: "id",
         },
       },
-      post_id: {
+      postId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -31,10 +31,6 @@ module.exports = {
       image_url: {
         allowNull: true,
         type: Sequelize.STRING,
-      },
-      date: {
-        allowNull: false,
-        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,

@@ -2,19 +2,21 @@ const models = require("../models");
 const fs = require("fs");
 
 exports.createPost = (req, res, next) => {
-  models.user.findOne({ where: { id: req.auth.userId } }).then((user) => {
-    models.post
-      .create({
-        userId: user.id,
-        content: req.body.content,
-        /*image_url: `${req.protocol}://${req.get("host")}/images/${
+  models.user
+    .findOne({ where: { id: req.auth.userId } })
+    .then((user) => {
+      models.post
+        .create({
+          userId: user.id,
+          content: req.body.content,
+          /*image_url: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,*/
-      })
-      .then(() => res.status(201).json("Post created!!"))
-      .catch((error) => res.status(404).json({ error }));
-  });
-  //.catch((error) => res.status(500).json({ error }));
+        })
+        .then(() => res.status(201).json("Post created!!"))
+        .catch((error) => res.status(404).json({ error }));
+    })
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.updatePost = (req, res, next) => {
@@ -70,7 +72,7 @@ exports.deletePost = (req, res, next) => {
       //const filename = post.image_url.split("/images")[1];
       //fs.unlink(`images/${filename}`, () => {
       post
-        .destroy({ where: { _id: req.params.id } })
+        .destroy({ where: { id: req.params.id } })
         .then(() => {
           res.status(201).json({ message: "Post delete !" });
         })

@@ -4,8 +4,6 @@ module.exports = (sequelize, DataTypes) => {
   var usersliked = sequelize.define(
     "usersliked",
     {
-      user_id: DataTypes.INTEGER,
-      post_id: DataTypes.INTEGER,
       likes: DataTypes.INTEGER,
     },
     {
