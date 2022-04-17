@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   var usersliked = sequelize.define(
     "usersliked",
     {
-      likes: DataTypes.INTEGER,
+      like: DataTypes.INTEGER,
     },
     {
       classMethods: {

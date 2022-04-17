@@ -9,6 +9,7 @@ exports.createPost = (req, res, next) => {
         .create({
           userId: user.id,
           content: req.body.content,
+          likes: 0,
           /*image_url: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,*/
@@ -63,9 +64,6 @@ exports.deletePost = (req, res, next) => {
         });
       }
       if (post.userId !== req.auth.userId) {
-        console.log(post);
-        console.log(post.userId);
-        console.log(req.auth.userId);
         return res.status(401).json({ message: "Unauthorized request" });
       }
       //nom du fichier à supprimer

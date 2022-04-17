@@ -4,7 +4,7 @@ exports.createComment = (req, res, next) => {
   models.user
     .findOne({ where: { id: req.auth.userId } })
     .then((user) => {
-      models.post.findOne({ where: { id: req.params.id } }).then((post) => {
+      models.post.findOne({ where: { id: req.params.postId } }).then((post) => {
         models.comment
           .create({
             userId: user.id,
@@ -22,7 +22,7 @@ exports.createComment = (req, res, next) => {
 };
 exports.updateComment = (req, res, next) => {
   models.post
-    .findOne({ where: { id: req.params.id } })
+    .findOne({ where: { id: req.params.postId } })
     .then((post) => {
       console.log(post);
       models.comment
@@ -50,7 +50,7 @@ exports.updateComment = (req, res, next) => {
               }
             : { content: req.body.content };
           comment
-            .update({ ...commentObject })
+            .update({ ...commentObject }, { where: { id: req.params.id } })
             .then(() => {
               res.status(201).json({ message: "Comment edit !" });
             })
@@ -62,7 +62,7 @@ exports.updateComment = (req, res, next) => {
 };
 exports.deleteComment = (req, res, next) => {
   models.comment
-    .findOne({ where: { postId: req.params.id } })
+    .findOne({ where: { postId: req.params.postId, id: req.params.id } })
     .then((comment) => {
       if (comment.userId !== req.auth.userId) {
         return res.status(401).json({ message: "Unauthorized request" });
@@ -71,7 +71,7 @@ exports.deleteComment = (req, res, next) => {
       //const filename = post.image_url.split("/images")[1];
       //fs.unlink(`images/${filename}`, () => {
       comment
-        .destroy({ where: { postId: req.params.id } })
+        .destroy({ where: { postId: req.params.postId, id: req.params.id } })
         .then(() => {
           res.status(201).json({ message: "Comment delete !" });
         })
@@ -82,4 +82,22 @@ exports.deleteComment = (req, res, next) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
-exports.readComment = (req, res, next) => {};
+exports.readComment = (req, res, next) => {
+  models.comment
+    .findAll({
+      include: [
+        {
+          model: models.user,
+          attributes: ["firstName", "lastName"],
+        },
+      ],
+    })
+    .then((comment) => {
+      if (comment) {
+        res.status(200).json(comment);
+      } else {
+        res.status(404).json({ error: "no comment found" });
+      }
+    })
+    .catch((error) => res.status(500).json({ error }));
+};

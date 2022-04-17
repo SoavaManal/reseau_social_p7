@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRouter);
 app.use("/api/posts", postRouter);
-app.use("/api/posts/comments", commentRouter);
-app.use("api/posts/likes", likesRouter);
+app.use("/api/posts", commentRouter);
+app.use("/api/posts", likesRouter);
 
 module.exports = app;
