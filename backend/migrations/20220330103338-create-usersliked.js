@@ -15,6 +15,8 @@ module.exports = {
           model: "posts",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       userId: {
         allowNull: false,
@@ -23,6 +25,8 @@ module.exports = {
           model: "users",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       like: {
         allowNull: false,

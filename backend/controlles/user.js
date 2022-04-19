@@ -34,14 +34,6 @@ exports.signup = (req, res, next) => {
     return res.status(400).json({ error: "weak password" });
   }
 
-  let isAdmin = 0;
-  if (req.body.email == "admin_groupomania@gmail.com") {
-    if (req.body.password.match(process.env.ADMIN_PASSWORD)) {
-      isAdmin = 1;
-    } else {
-      return res.status(400).json({ error: "password admin is not valid!!" });
-    }
-  }
   models.user
     .findOne({
       where: { email: req.body.email },
@@ -60,7 +52,7 @@ exports.signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               bio: req.body.bio,
-              isAdmin: isAdmin,
+              isAdmin: 0,
             })
             .then(res.status(201).json({ message: "User has been created" }))
             .catch(() => res.status(400).json({ error: "bad request" }));
@@ -98,7 +90,7 @@ exports.login = (req, res, next) => {
               });
             }
           })
-          .catch((error) =>
+          .catch(() =>
             res.status(500).json({ error: "can't compare the password" })
           );
       }
@@ -166,12 +158,10 @@ exports.deleteUser = (req, res, next) => {
           .then(() =>
             res.status(200).json({ message: "user has been deleted" })
           )
-          .catch((error) => res.status(400).json({ error: "bad request" }));
+          .catch(() => res.status(400).json({ error: "bad request" }));
       } else {
         return res.status(401).json({ error: "unauthorized request" });
       }
     })
-    .catch((error) =>
-      res.status(500).json({ error: "can't access the database" })
-    );
+    .catch(() => res.status(500).json({ error: "can't access the database" }));
 };

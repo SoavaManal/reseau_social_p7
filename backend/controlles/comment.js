@@ -1,4 +1,5 @@
 const models = require("../models");
+const fs = require("fs");
 
 exports.createComment = (req, res, next) => {
   models.user
@@ -10,9 +11,9 @@ exports.createComment = (req, res, next) => {
             userId: user.id,
             postId: post.id,
             content: req.body.content,
-            /*image_url: `${req.protocol}://${req.get("host")}/images/${
-                  req.file.filename
-                }`,*/
+            image_url: `${req.protocol}://${req.get("host")}/images/${
+              req.file.filename
+            }`,
           })
           .then(() => res.status(201).json("comment created!!"))
           .catch((error) => res.status(404).json({ error }));
@@ -66,17 +67,19 @@ exports.deleteComment = (req, res, next) => {
     .then((comment) => {
       if (comment.userId == req.auth.userId || req.auth.isAdmin == 1) {
         //nom du fichier à supprimer
-        //const filename = post.image_url.split("/images")[1];
-        //fs.unlink(`images/${filename}`, () => {
-        comment
-          .destroy({ where: { postId: req.params.postId, id: req.params.id } })
-          .then(() => {
-            res.status(201).json({ message: "Comment delete !" });
-          })
-          .catch((error) => {
-            res.status(400).json({ error });
-          });
-        // });
+        const filename = comment.image_url.split("/images")[1];
+        fs.unlink(`images/${filename}`, () => {
+          comment
+            .destroy({
+              where: { postId: req.params.postId, id: req.params.id },
+            })
+            .then(() => {
+              res.status(201).json({ message: "Comment delete !" });
+            })
+            .catch((error) => {
+              res.status(400).json({ error });
+            });
+        });
       } else {
         return res.status(401).json({ message: "Unauthorized request" });
       }
