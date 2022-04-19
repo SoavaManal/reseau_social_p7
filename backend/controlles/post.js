@@ -56,29 +56,32 @@ exports.updatePost = (req, res, next) => {
 };
 
 exports.deletePost = (req, res, next) => {
-  models.post.findOne({ where: { id: req.params.id } }).then((post) => {
-    if (!post) {
-      return res.status(404).json({
-        error: new Error("post unexist"),
-      });
-    }
-    if (post.userId !== req.auth.userId) {
-      return res.status(401).json({ message: "Unauthorized request" });
-    }
-    //nom du fichier à supprimer
-    /*const filename = post.image_url.split("/images")[1];
-    fs.unlink(`images/${filename}`, () => {*/
-    post
-      .destroy({ where: { id: req.params.id } })
-      .then(() => {
-        res.status(201).json({ message: "Post delete !" });
-      })
-      .catch((error) => {
-        res.status(400).json({ error });
-      });
-    //});
-  });
-  //.catch((error) => res.status(500).json({ error }));
+  models.post
+    .findOne({ where: { id: req.params.id } })
+    .then((post) => {
+      if (!post) {
+        return res.status(404).json({
+          error: new Error("post unexist"),
+        });
+      }
+      if (post.userId == req.auth.userId || req.auth.isAdmin == 1) {
+        //nom du fichier à supprimer
+        /*const filename = post.image_url.split("/images")[1];
+      fs.unlink(`images/${filename}`, () => {*/
+        post
+          .destroy({ where: { id: req.params.id } })
+          .then(() => {
+            res.status(201).json({ message: "Post delete !" });
+          })
+          .catch((error) => {
+            res.status(400).json({ error });
+          });
+        //});
+      } else {
+        return res.status(401).json({ message: "Unauthorized request" });
+      }
+    })
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.readAllPost = (req, res, next) => {

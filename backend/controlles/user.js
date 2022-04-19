@@ -34,6 +34,14 @@ exports.signup = (req, res, next) => {
     return res.status(400).json({ error: "weak password" });
   }
 
+  let isAdmin = 0;
+  if (req.body.email == "admin_groupomania@gmail.com") {
+    if (req.body.password.match(process.env.ADMIN_PASSWORD)) {
+      isAdmin = 1;
+    } else {
+      return res.status(400).json({ error: "password admin is not valid!!" });
+    }
+  }
   models.user
     .findOne({
       where: { email: req.body.email },
@@ -52,7 +60,7 @@ exports.signup = (req, res, next) => {
               email: req.body.email,
               password: hash,
               bio: req.body.bio,
-              isAdmin: false,
+              isAdmin: isAdmin,
             })
             .then(res.status(201).json({ message: "User has been created" }))
             .catch(() => res.status(400).json({ error: "bad request" }));
@@ -144,9 +152,7 @@ exports.deleteUser = (req, res, next) => {
     .findOne({ where: { id: req.params.id } })
     .then((user) => {
       console.log(user);
-      if (user.id !== req.auth.userId && req.auth.isAdmin == 0) {
-        return res.status(401).json({ error: "unauthorized request" });
-      } else if (user.id == req.auth.userId || req.auth.isAdmin == 1) {
+      if (user.id == req.auth.userId || req.auth.isAdmin == 1) {
         models.post
           .findOne({ where: { userId: user.id } })
           .then((posts) => {
@@ -161,6 +167,8 @@ exports.deleteUser = (req, res, next) => {
             res.status(200).json({ message: "user has been deleted" })
           )
           .catch((error) => res.status(400).json({ error: "bad request" }));
+      } else {
+        return res.status(401).json({ error: "unauthorized request" });
       }
     })
     .catch((error) =>

@@ -64,21 +64,22 @@ exports.deleteComment = (req, res, next) => {
   models.comment
     .findOne({ where: { postId: req.params.postId, id: req.params.id } })
     .then((comment) => {
-      /*if (comment.userId !== req.auth.userId && req.auth.isAdmin == 0) {
+      if (comment.userId == req.auth.userId || req.auth.isAdmin == 1) {
+        //nom du fichier à supprimer
+        //const filename = post.image_url.split("/images")[1];
+        //fs.unlink(`images/${filename}`, () => {
+        comment
+          .destroy({ where: { postId: req.params.postId, id: req.params.id } })
+          .then(() => {
+            res.status(201).json({ message: "Comment delete !" });
+          })
+          .catch((error) => {
+            res.status(400).json({ error });
+          });
+        // });
+      } else {
         return res.status(401).json({ message: "Unauthorized request" });
-      } else if (comment.userId == req.auth.userId || req.auth.isAdmin == 1) {*/
-      //nom du fichier à supprimer
-      //const filename = post.image_url.split("/images")[1];
-      //fs.unlink(`images/${filename}`, () => {
-      comment
-        .destroy({ where: { postId: req.params.postId, id: req.params.id } })
-        .then(() => {
-          res.status(201).json({ message: "Comment delete !" });
-        })
-        .catch((error) => {
-          res.status(400).json({ error });
-        });
-      // });
+      }
     })
     .catch((error) => res.status(500).json({ error }));
 };
