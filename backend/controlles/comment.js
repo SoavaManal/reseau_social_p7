@@ -64,9 +64,9 @@ exports.deleteComment = (req, res, next) => {
   models.comment
     .findOne({ where: { postId: req.params.postId, id: req.params.id } })
     .then((comment) => {
-      if (comment.userId !== req.auth.userId) {
+      /*if (comment.userId !== req.auth.userId && req.auth.isAdmin == 0) {
         return res.status(401).json({ message: "Unauthorized request" });
-      }
+      } else if (comment.userId == req.auth.userId || req.auth.isAdmin == 1) {*/
       //nom du fichier à supprimer
       //const filename = post.image_url.split("/images")[1];
       //fs.unlink(`images/${filename}`, () => {

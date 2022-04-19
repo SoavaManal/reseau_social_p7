@@ -15,9 +15,15 @@ module.exports = (sequelize, DataTypes) => {
       classMethods: {
         associate: function (models) {
           // associations can be defined here
-          models.user.hasMany(models.post);
-          models.user.hasMany(models.comment);
-          models.user.hasMany(models.usersliked);
+          models.user.hasMany(models.post, {
+            onDelete: "cascade",
+          });
+          models.user.hasMany(models.comment, {
+            onDelete: "cascade",
+          });
+          models.user.hasMany(models.usersliked, {
+            onDelete: "cascade",
+          });
         },
       },
     }

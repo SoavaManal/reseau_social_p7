@@ -13,8 +13,12 @@ module.exports = (sequelize, DataTypes) => {
         associate: function (models) {
           // associations can be defined here
 
-          models.post.hasMany(models.comment);
-          models.post.hasMany(models.usersliked);
+          models.post.hasMany(models.comment, {
+            onDelete: "cascade",
+          });
+          models.post.hasMany(models.usersliked, {
+            onDelete: "cascade",
+          });
           models.post.belongsTo(models.user, {
             foreignKey: {
               allowNull: false,

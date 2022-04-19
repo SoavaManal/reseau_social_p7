@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const models = require("../models");
 
+//s'inscrire
 exports.signup = (req, res, next) => {
   //verrifier si un des paramettre non null n'est pas renseigner
   if (
@@ -54,12 +55,16 @@ exports.signup = (req, res, next) => {
               isAdmin: false,
             })
             .then(res.status(201).json({ message: "User has been created" }))
-            .catch((error) => res.status(400).json({ error }));
+            .catch(() => res.status(400).json({ error: "bad request" }));
         })
-        .catch((error) => res.status(500).json({ error }));
-    });
+        .catch(() =>
+          res.status(500).json({ error: "cannot hash the password" })
+        );
+    })
+    .catch(() => res.status(500).json({ error: "can't access the database" }));
 };
 
+//se connecter
 exports.login = (req, res, next) => {
   models.user
     .findOne({ where: { email: req.body.email } })
@@ -85,12 +90,15 @@ exports.login = (req, res, next) => {
               });
             }
           })
-          .catch((error) => res.status(500).json({ error }));
+          .catch((error) =>
+            res.status(500).json({ error: "can't compare the password" })
+          );
       }
     })
-    .catch((error) => res.status(500).json({ error }));
+    .catch(() => res.status(500).json({ error: "can't access the database" }));
 };
 
+//Read the profile of users
 exports.getUserInfo = (req, res, next) => {
   models.user
     .findOne({
@@ -98,9 +106,10 @@ exports.getUserInfo = (req, res, next) => {
       where: { id: req.params.id },
     })
     .then((user) => res.status(200).json(user))
-    .catch((error) => res.status(400).json({ error }));
+    .catch(() => res.status(400).json({ error: "bad request" }));
 };
 
+//modifier le profile
 exports.updateUserInfo = (req, res, next) => {
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
@@ -124,32 +133,37 @@ exports.updateUserInfo = (req, res, next) => {
         .then(() =>
           res.status(201).json({ message: "profile has been modified" })
         )
-        .catch((error) => res.status(400).json({ error }));
+        .catch(() => res.status(400).json({ error: "bad request" }));
     })
-    .catch((error) => res.status(500).json({ error }));
+    .catch(() => res.status(500).json({ error: "can't access the database" }));
 };
 
+//suppression du compte
 exports.deleteUser = (req, res, next) => {
-  models.user.findOne({ where: { id: req.params.id } }).then((user) => {
-    console.log(user);
-    if (user.id !== req.auth.userId) {
-      console.log(user.id);
-      console.log(req.auth.userId);
-      return res.status(401).json({ error: "unauthorized request" });
-    } else {
-      models.post
-        .findOne({ where: { userId: user.id } })
-        .then((posts) => {
-          if (posts) {
-            posts.destroy({ where: { userId: user.id } });
-          }
-        })
-        .catch((error) => res.status(400).json({ error }));
-      user
-        .destroy({ where: { id: req.params.id } })
-        .then(() => res.status(200).json({ message: "user has been deleted" }))
-        .catch((error) => res.status(400).json({ error }));
-    }
-  });
-  //.catch((error) => res.status(500).json({ error }));*/
+  models.user
+    .findOne({ where: { id: req.params.id } })
+    .then((user) => {
+      console.log(user);
+      if (user.id !== req.auth.userId && req.auth.isAdmin == 0) {
+        return res.status(401).json({ error: "unauthorized request" });
+      } else if (user.id == req.auth.userId || req.auth.isAdmin == 1) {
+        models.post
+          .findOne({ where: { userId: user.id } })
+          .then((posts) => {
+            if (posts) {
+              posts.destroy({ where: { userId: user.id } });
+            }
+          })
+          .catch(() => res.status(400).json({ error: "bad request" }));
+        user
+          .destroy({ where: { id: req.params.id } })
+          .then(() =>
+            res.status(200).json({ message: "user has been deleted" })
+          )
+          .catch((error) => res.status(400).json({ error: "bad request" }));
+      }
+    })
+    .catch((error) =>
+      res.status(500).json({ error: "can't access the database" })
+    );
 };
