@@ -2,23 +2,21 @@ const models = require("../models");
 const fs = require("fs");
 
 exports.createPost = (req, res, next) => {
-  models.user
-    .findOne({ where: { id: req.auth.userId } })
-    .then((user) => {
-      console.log(user);
-      models.post
-        .create({
-          userId: user.id,
-          content: req.body.content,
-          likes: 0,
-          image_url: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`,
-        })
-        .then(() => res.status(201).json("Post created!!"))
-        .catch((error) => res.status(404).json({ error }));
-    })
-    .catch((error) => res.status(500).json({ error }));
+  models.user.findOne({ where: { id: req.auth.userId } }).then((user) => {
+    console.log(user);
+    models.post
+      .create({
+        userId: user.id,
+        content: req.body.content,
+        likes: 0,
+        image_url: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`,
+      })
+      .then(() => res.status(201).json("Post created!!"))
+      .catch((error) => res.status(404).json({ error }));
+  });
+  //.catch((error) => res.status(500).json({ error }));
 };
 
 exports.updatePost = (req, res, next) => {
