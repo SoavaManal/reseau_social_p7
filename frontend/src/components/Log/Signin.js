@@ -5,8 +5,7 @@ import axios from "axios";
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const emailError = document.querySelector(".email.error");
-  const passwordError = document.querySelector(".password.error");
+  const errorsMessage = document.querySelector(".error");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -19,15 +18,17 @@ const Signin = () => {
       },
     })
       .then((res) => {
-        console.log(res.data);
-        if (res.data.errors) {
-          emailError.innerHTML = res.data.errors.email;
-          passwordError.innerHTML = res.data.errors.password;
-        } else {
-          window.location = "/";
-        }
+        console.log("le resultat", res.data);
+        //   //window.location = "/";
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+          errorsMessage.innerHTML = error.response.data.errors;
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
   };
   return (
     <form action="" onSubmit={handleLogin}>
@@ -53,10 +54,8 @@ const Signin = () => {
       <br />
       <input value="Se connecter" type="submit" />
       <br />
-      <div className=".email.error"></div>
-      <div className=".password.error"></div>
+      <div className="error"></div>
     </form>
   );
 };
-
 export default Signin;

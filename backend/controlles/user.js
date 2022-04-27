@@ -12,14 +12,18 @@ exports.signup = (req, res, next) => {
     req.body.email == null ||
     req.body.password == null
   ) {
-    return res.status(400).json({ errors: "missing parameters" });
+    return res.status(400).json({ errors: "Manque des parameters" });
   }
   //verrifier le nom et le prenom
   if (req.body.firstName.length <= 3 || req.body.firstName.length >= 13) {
-    return res.status(400).json({ errors: "firstName must be lenght (4-12)" });
+    return res
+      .status(400)
+      .json({ errors: "Le prenom doit contenir entre (4-12) caractéres" });
   }
   if (req.body.lastName.length <= 3 || req.body.lastName.length >= 13) {
-    return res.status(400).json({ errors: "lastName must be lenght (4-12)" });
+    return res
+      .status(400)
+      .json({ errors: "Le nom doit contenir entre (4-12) caractéres" });
   }
 
   //verrifier l'email est le password avec des regex
@@ -27,21 +31,23 @@ exports.signup = (req, res, next) => {
   const emailValidator =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!emailValidator.test(req.body.email)) {
-    return res.status(400).json({ errors: "email not valid!!" });
+    return res.status(400).json({ errors: "email n'est pas valid!!" });
   }
 
   const passwordValidator = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}$/;
   if (!passwordValidator.test(req.body.password)) {
-    return res.status(400).json({ errors: "weak password" });
+    return res.status(400).json({
+      errors:
+        "Mot de passe faible:*8 caractéres min*une majuscule ou plusieurs*une miniscule ou plusieurs*un chiffre ou plusieurs",
+    });
   }
-
   models.user
     .findOne({
       where: { email: req.body.email },
     })
     .then((user) => {
       if (user) {
-        res.status(400).json({ message: "user already exist" });
+        res.status(400).json({ errors: "Cet email exist déja" });
       }
       bcrypt.hash(req.body.password, 10).then((hash) => {
         const newUser = models.user
@@ -51,9 +57,11 @@ exports.signup = (req, res, next) => {
             email: req.body.email,
             password: hash,
             bio: req.body.bio,
-            /*image: `${req.protocol}://${req.get("host")}/images/${
-              req.file.filename
-            }`,*/
+            image: req.file
+              ? `${req.protocol}://${req.get("host")}/images/${
+                  req.file.filename
+                }`
+              : null,
             isAdmin: 0,
           })
           .then(res.status(201).json({ message: "User has been created" }))
@@ -65,19 +73,24 @@ exports.signup = (req, res, next) => {
 
 //se connecter
 exports.login = (req, res, next) => {
+  // if (req.body.email == null || req.body.password == null) {
+  //   console.log(req.body.email);
+  //   console.log(req.body.password);
+  //   return res
+  //     .status(400)
+  //     .json({ error: "Merci de renseigner votre email et mot de passe!" });
+  // }
   models.user
     .findOne({ where: { email: req.body.email } })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({ errors: "Email n'existe pas!!" });
+        return res.status(401).json({ errors: "Email n'exist pas!" });
       } else if (user) {
         bcrypt
           .compare(req.body.password, user.password)
           .then((valid) => {
             if (!valid) {
-              return res
-                .status(401)
-                .json({ errors: "Mot de passe incorrecte!" });
+              return res.status(401).json({ errors: "Mot de passe incorrect" });
             } else if (valid) {
               res.status(200).json({
                 userId: user.id,
@@ -92,11 +105,11 @@ exports.login = (req, res, next) => {
             }
           })
           .catch(() =>
-            res.status(500).json({ error: "can't compare the password" })
+            res.status(500).json({ errors: "can't compare the password" })
           );
       }
     })
-    .catch(() => res.status(500).json({ error: "can't access the database" }));
+    .catch(() => res.status(500).json({ errors: "can't access the database" }));
 };
 
 //Read the profile of users

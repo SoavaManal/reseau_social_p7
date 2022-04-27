@@ -6,9 +6,7 @@ const Signup = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const nameError = document.querySelector(".name.error");
-  const emailError = document.querySelector(".email.error");
-  const passwordError = document.querySelector(".password.error");
+  const errorMessage = document.querySelector(".error");
 
   const handelRegister = (e) => {
     e.preventDefault();
@@ -23,17 +21,19 @@ const Signup = () => {
       },
     })
       .then((res) => {
-        console.log(res);
-        if (res.data.errors) {
-          nameError.innerHTML = res.data.errors.lastName;
-          emailError.innerHTML = res.data.errors.email;
-          passwordError.innerHTML = res.data.errors.password;
-        } else {
-          window.location = "/";
-        }
+        //window.location = "/";
+        console.log(res.data);
+        // }
       })
-      .catch((errors) => {
-        throw new Error({ errors });
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+          if (error.response.data) {
+            errorMessage.innerHTML = error.response.data.errors;
+          }
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
       });
   };
   return (
@@ -79,9 +79,8 @@ const Signup = () => {
       />
       <br />
       <input value="S'inscrire" type="submit" />
-      <div className="name error"></div>
-      <div className="email error"></div>
-      <div className="password error"></div>
+
+      <div className="error"></div>
     </form>
   );
 };

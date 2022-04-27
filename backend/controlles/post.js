@@ -4,14 +4,15 @@ const fs = require("fs");
 exports.createPost = (req, res, next) => {
   models.user.findOne({ where: { id: req.auth.userId } }).then((user) => {
     console.log(user);
+    console.log(req.file);
     models.post
       .create({
         userId: user.id,
         content: req.body.content,
         likes: 0,
-        image_url: `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`,
+        image_url: req.file
+          ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+          : null,
       })
       .then(() => res.status(201).json("Post created!!"))
       .catch((error) => res.status(404).json({ error }));
