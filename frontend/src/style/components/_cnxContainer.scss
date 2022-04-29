@@ -4,34 +4,10 @@
     width: 400px;
     margin:   auto ;
     padding: 20px 0;
-    //user-select: none;
     text-align: center;
     background-color: $color-pink;
-    
-  
     h3 {
       padding: 10px 0 15px;
-    }
-  
-    ul {
-      padding: 10px;
-      display: flex;
-      justify-content: space-around;
-  
-      li {
-        transition: 0.2s;
-        cursor: pointer;
-        font-size: 25px;
-        list-style: none;
-        font-weight: bold;
-  
-        &:hover {
-          color: $color-orange;
-        }
-      }
-    }
-    .active-btn {
-      color: $color-orange;
     }
   }
   form {
@@ -55,4 +31,12 @@
       border-radius: 20px;
     }
   
+}
+.error{
+  color:red;
+  padding-top:15px;
+}
+.success{
+  color:green;
+  padding-top: 10px;
 }

@@ -18,8 +18,8 @@ const Signin = () => {
       },
     })
       .then((res) => {
-        console.log("le resultat", res.data);
-        //   //window.location = "/";
+        localStorage.setItem("jwt", res.data.token);
+        window.location = "/Account";
       })
       .catch((error) => {
         if (error.response) {

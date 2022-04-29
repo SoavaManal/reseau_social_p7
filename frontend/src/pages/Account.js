@@ -1,9 +1,10 @@
 import React from "react";
+import Navlink from "../components/Navlink";
 
 const Account = () => {
   return (
-    <div>
-      <h1>account</h1>
+    <div className="account">
+      <Navlink />
     </div>
   );
 };

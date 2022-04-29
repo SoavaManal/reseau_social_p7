@@ -8,15 +8,37 @@
   $color-pink: rgb(254, 231, 240);
   $color-1: #ff7b77;
   $color-2: #ffd0c4;
+  $shadow: rgb(219, 218, 218);
 
   body{
       font-family: $font-1;
       color: rgb(45, 36, 30);
       background: url("../../public/image/solidarite.jpg") no-repeat;
-      background-size: 100%;
+      background-size: 100%;  
       @media(max-width:510px) {
         background:none;
       }
+  }
+  ul {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 18px;
+    padding-left: 0;
+
+    li {
+      list-style: none;
+      cursor: pointer;
+      border-radius: 20px;
+      padding: 12px 14px;
+      transition: .2s;
+      margin: 0 8px;
+      font-size: 25px;
+      font-weight: bold;
+    }
+    .active-btn {
+      color: $color-orange;
+    
+    }
   }
   input,
 textarea {
@@ -58,8 +80,4 @@ i {
   &:hover {
     transform: scale(1.1);
   }
-}
-.error{
-  color:red;
-  padding-top:15px;
 }

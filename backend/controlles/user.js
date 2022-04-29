@@ -7,10 +7,10 @@ const fs = require("fs");
 exports.signup = (req, res, next) => {
   //verrifier si un des paramettre non null n'est pas renseigner
   if (
-    req.body.firstName == null ||
-    req.body.lastName == null ||
-    req.body.email == null ||
-    req.body.password == null
+    req.body.firstName === null ||
+    req.body.lastName === null ||
+    req.body.email === null ||
+    req.body.password === null
   ) {
     return res.status(400).json({ errors: "Manque des parameters" });
   }
@@ -48,25 +48,26 @@ exports.signup = (req, res, next) => {
     .then((user) => {
       if (user) {
         res.status(400).json({ errors: "Cet email exist déja" });
+      } else {
+        bcrypt.hash(req.body.password, 10).then((hash) => {
+          const newUser = models.user
+            .create({
+              firstName: req.body.firstName,
+              lastName: req.body.lastName,
+              email: req.body.email,
+              password: hash,
+              bio: req.body.bio,
+              image: req.file
+                ? `${req.protocol}://${req.get("host")}/images/${
+                    req.file.filename
+                  }`
+                : null,
+              isAdmin: 0,
+            })
+            .then(res.status(201).json({ message: "User has been created" }))
+            .catch(() => res.status(400).json({ error: "bad request" }));
+        });
       }
-      bcrypt.hash(req.body.password, 10).then((hash) => {
-        const newUser = models.user
-          .create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: hash,
-            bio: req.body.bio,
-            image: req.file
-              ? `${req.protocol}://${req.get("host")}/images/${
-                  req.file.filename
-                }`
-              : null,
-            isAdmin: 0,
-          })
-          .then(res.status(201).json({ message: "User has been created" }))
-          .catch(() => res.status(400).json({ error: "bad request" }));
-      });
     })
     .catch(() => res.status(500).json({ error: "can't access the database" }));
 };

@@ -1,39 +1,14 @@
+
+
 .connection-form {
         background: red;
         border-radius: 20px;
         padding: 20px;
-
-        ul {
-          display: flex;
-          justify-content: center;
-          margin-bottom: 18px;
-
-          li {
-            cursor: pointer;
-            border-radius: 20px;
-            padding: 12px 14px;
-            transition: .2s;
-            margin: 0 8px;
-          }
-          .active-btn {
-            background: $color-orange;
-  
-            &:hover {
-              background: $color-pink;
-            }
-          }
-          li:not(.active-btn) {
-            &:hover {
-              transform: translateX(3px)
-            }
-          }
-        }
         form {
           input {
             padding: 10px 14px;
             margin: 0;
             font-size: 1.2rem;
-            //font-family: $font-2;
             border-radius: 20px;
   
             &:focus {
@@ -44,6 +19,5 @@
             padding: 14px 14px;
             border-radius: 20px;
           }
-        }
-      
+        }  
   }
