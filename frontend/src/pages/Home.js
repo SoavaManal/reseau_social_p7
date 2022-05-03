@@ -4,10 +4,10 @@ import Logo from "../components/Logo";
 
 const Home = () => {
   return (
-    <main className="home">
+    <div className="home">
       <Logo />
       <Log signup={false} signin={true} />
-    </main>
+    </div>
   );
 };
 

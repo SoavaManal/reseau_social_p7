@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const models = require("../models");
 const fs = require("fs");
+const { profile } = require("console");
 
 //s'inscrire
 exports.signup = (req, res, next) => {
@@ -15,12 +16,12 @@ exports.signup = (req, res, next) => {
     return res.status(400).json({ errors: "Manque des parameters" });
   }
   //verrifier le nom et le prenom
-  if (req.body.firstName.length <= 3 || req.body.firstName.length >= 13) {
+  if (req.body.firstName.length < 3 || req.body.firstName.length >= 13) {
     return res
       .status(400)
       .json({ errors: "Le prenom doit contenir entre (4-12) caractéres" });
   }
-  if (req.body.lastName.length <= 3 || req.body.lastName.length >= 13) {
+  if (req.body.lastName.length < 3 || req.body.lastName.length >= 13) {
     return res
       .status(400)
       .json({ errors: "Le nom doit contenir entre (4-12) caractéres" });
@@ -117,16 +118,22 @@ exports.login = (req, res, next) => {
 exports.getUserInfo = (req, res, next) => {
   models.user
     .findOne({
-      attributes: ["firstName", "lastName", "email", "bio", "image"],
+      attributes: ["id", "firstName", "lastName", "email", "bio", "image"],
       where: { id: req.params.id },
     })
-    .then((user) => res.status(200).json(user))
-    .catch(() => res.status(400).json({ error: "bad request" }));
+    .then((user) => {
+      if (user.id == req.auth.userId) {
+        return res.status(200).json(user);
+      } else {
+        return res.status(404).json("bad request");
+      }
+    })
+    .catch((error) => res.status(400).json({ error }));
 };
 
 exports.getAllUser = (req, res, next) => {
   models.user
-    .find({
+    .findAll({
       attributes: ["firstName", "lastName", "image"],
     })
     .then((user) => res.status(200).json(user))

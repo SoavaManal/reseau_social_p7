@@ -1,7 +1,11 @@
 .account{
     background: white;
-    margin-top: 40px;
-    margin-left: 150px;
-    margin-right: 150px;
     border-radius: 20px;
+    margin: 30px;
+    &-icons{
+        margin-top: -70px;
+    }
+}
+.navigation-active{
+    color:$color-orange;
 }

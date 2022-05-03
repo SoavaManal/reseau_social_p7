@@ -1,11 +1,12 @@
 import React from "react";
-import Navlink from "../components/Navlink";
+import Navigation from "../components/Account";
+import NavigationBarre from "../components/NavigationBarre";
 
 const Account = () => {
   return (
-    <div className="account">
-      <Navlink />
-    </div>
+    <>
+      <Navigation acceuil={true} profil={false} users={false} />
+    </>
   );
 };
 

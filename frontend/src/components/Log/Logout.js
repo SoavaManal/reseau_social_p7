@@ -9,8 +9,12 @@ const Logout = () => {
   };
   return (
     <div>
-      <li onClick={logout} className="navigation-link">
-        <img alt="icons pour se déconnecter" src="./image/icons/logout.svg" />
+      <li onClick={logout}>
+        <img
+          alt="icons pour se déconnecter"
+          src="./image/icons/logout.svg"
+          className="navigation-logout"
+        />
       </li>
     </div>
   );

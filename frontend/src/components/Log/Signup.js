@@ -22,12 +22,7 @@ const Signup = () => {
         password: password,
       },
     })
-      .then((res) => {
-        {
-          console.log(res.data);
-          setSubmitForm(true);
-        }
-      })
+      .then((res) => setSubmitForm(true))
       .catch((error) => {
         if (error.response) {
           console.log(error.response.data);

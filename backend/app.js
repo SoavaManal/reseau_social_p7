@@ -14,6 +14,14 @@ dotenv.config(); //utiliser dotenv "acceder aux varriables d'environnement"
 //parser le json autre methode body-parser
 app.use(express.json());
 
+const cors = require("cors");
+const corsOptions = {
+  origin: "http://localhost:3001",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
