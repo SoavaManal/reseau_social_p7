@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const models = require("../models");
 const fs = require("fs");
-const { profile } = require("console");
 
 //s'inscrire
 exports.signup = (req, res, next) => {
@@ -75,13 +74,6 @@ exports.signup = (req, res, next) => {
 
 //se connecter
 exports.login = (req, res, next) => {
-  // if (req.body.email == null || req.body.password == null) {
-  //   console.log(req.body.email);
-  //   console.log(req.body.password);
-  //   return res
-  //     .status(400)
-  //     .json({ error: "Merci de renseigner votre email et mot de passe!" });
-  // }
   models.user
     .findOne({ where: { email: req.body.email } })
     .then((user) => {
@@ -119,7 +111,7 @@ exports.getUserInfo = (req, res, next) => {
   models.user
     .findOne({
       attributes: ["id", "firstName", "lastName", "email", "bio", "image"],
-      where: { id: req.params.id },
+      where: { id: req.auth.userId },
     })
     .then((user) => {
       if (user.id == req.auth.userId) {
@@ -134,7 +126,7 @@ exports.getUserInfo = (req, res, next) => {
 exports.getAllUser = (req, res, next) => {
   models.user
     .findAll({
-      attributes: ["firstName", "lastName", "image"],
+      attributes: ["id", "firstName", "lastName", "image", "bio", "email"],
     })
     .then((user) => res.status(200).json(user))
     .catch(() => res.status(400).json({ error: "bad request" }));
@@ -144,18 +136,19 @@ exports.updateUserInfo = (req, res, next) => {
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var bio = req.body.bio;
-  var image = `${req.protocol}://${req.get("host")}/images/${
-    req.file.filename
-  }`;
+  var image = req.file
+    ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+    : null;
   models.user
     .findOne({
       attributes: ["id", "firstName", "lastName", "bio", "image"],
-      where: { id: req.params.id },
+      where: { id: req.auth.userId },
     })
     .then((user) => {
-      if (user.id !== req.auth.userId) {
+      if (user.id != req.auth.userId) {
         return res.status(401).json({ error: "unauthorized request" });
       }
+      console.log(user.id);
       if (req.file) {
         const filename = user.image.split("/images")[1]; //le nom de l'image a supprimer
         fs.unlink(`images/${filename}`, function (error) {
@@ -174,7 +167,7 @@ exports.updateUserInfo = (req, res, next) => {
             bio: bio ? bio : user.bio,
             image: image ? image : user.image,
           },
-          { where: { id: req.params.id } }
+          { where: { id: req.auth.userId } }
         )
         .then(() =>
           res.status(201).json({ message: "profile has been modified" })
@@ -187,14 +180,13 @@ exports.updateUserInfo = (req, res, next) => {
 //suppression du compte
 exports.deleteUser = (req, res, next) => {
   models.user
-    .findOne({ where: { id: req.params.id } })
+    .findOne({ where: { id: req.auth.userId } })
     .then((user) => {
-      console.log(user);
       if (user.id == req.auth.userId || req.auth.isAdmin == 1) {
         const filename = user.image.split("/images")[1];
         fs.unlink(`images/${filename}`, () => {
           user
-            .destroy({ where: { id: req.params.id } })
+            .destroy({ where: { id: req.auth.userId } })
             .then(() =>
               res.status(200).json({ message: "user has been deleted" })
             )

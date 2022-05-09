@@ -22,7 +22,7 @@ const Signup = () => {
         password: password,
       },
     })
-      .then((res) => setSubmitForm(true))
+      .then(() => setSubmitForm(true))
       .catch((error) => {
         if (error.response) {
           console.log(error.response.data);

@@ -19,7 +19,8 @@ const Signin = () => {
     })
       .then((res) => {
         localStorage.setItem("jwt", res.data.token);
-        window.location = "/Account";
+
+        window.location = "/Account/me";
       })
       .catch((error) => {
         if (error.response) {

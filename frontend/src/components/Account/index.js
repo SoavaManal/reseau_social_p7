@@ -31,35 +31,37 @@ const Navigation = (props) => {
     }
   };
   return (
-    <div className="account">
+    <>
       <NavigationBarre />
-      <ul className="account-icons">
-        <li
-          onClick={handelModals}
-          className={acceuil ? "navigation-active" : ""}
-          id="acceuil"
-        >
-          <FontAwesomeIcon icon={faHouse}></FontAwesomeIcon>
-        </li>
-        <li
-          onClick={handelModals}
-          className={profil ? "navigation-active" : ""}
-          id="profil"
-        >
-          <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
-        </li>
-        <li
-          onClick={handelModals}
-          className={users ? "navigation-active" : ""}
-          id="users"
-        >
-          <FontAwesomeIcon icon={faUserGroup}></FontAwesomeIcon>
-        </li>
-      </ul>
-      {acceuil && <Acceuil />}
-      {profil && <Profil />}
-      {users && <Users />}
-    </div>
+      <div className="account">
+        <ul className="account-icons">
+          <li
+            onClick={handelModals}
+            className={acceuil ? "navigation-active" : ""}
+            id="acceuil"
+          >
+            <FontAwesomeIcon icon={faHouse}></FontAwesomeIcon>
+          </li>
+          <li
+            onClick={handelModals}
+            className={profil ? "navigation-active" : ""}
+            id="profil"
+          >
+            <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+          </li>
+          <li
+            onClick={handelModals}
+            className={users ? "navigation-active" : ""}
+            id="users"
+          >
+            <FontAwesomeIcon icon={faUserGroup}></FontAwesomeIcon>
+          </li>
+        </ul>
+        {acceuil && <Acceuil />}
+        {profil && <Profil />}
+        {users && <Users />}
+      </div>
+    </>
   );
 };
 

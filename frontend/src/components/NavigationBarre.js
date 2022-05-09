@@ -10,7 +10,7 @@ const NavigationBarre = () => {
         </div>
         <div>
           <ul>
-            <li className="navigation-header">Bienvenue X</li>
+            <li className="navigation-header">Bienvenue</li>
             <Logout />
           </ul>
         </div>

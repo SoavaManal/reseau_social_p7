@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import UserCard from "./UserCard";
 
 const Users = () => {
   const getToken = localStorage.getItem("jwt");
   const token = "Bearer " + getToken;
   const [user, setUser] = useState([]);
-  //evite de rappeller axios a l'infinit
-  useEffect(() => {
-    axios({
+
+  const getUsers = () => {
+    return axios({
       method: "GET",
       url: "http://localhost:3000/api/auth/",
       headers: {
@@ -20,20 +21,19 @@ const Users = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+  useEffect(() => {
+    getUsers();
   }, []);
   return (
     <div>
       <h1>COMMUNAUTEE</h1>
-      <div>
-        {user.map((user) => (
-          <ul>
-            <li>{user.firstName}</li>
-            <li>{user.lastName}</li>
-            <li>
-              <img src={user.image} />
-            </li>
-          </ul>
-        ))}
+      <div className="users">
+        <ul>
+          {user.map((user) => (
+            <UserCard key={user.id} user={user} />
+          ))}
+        </ul>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+//import { Provider } from "react-redux";
 import Routers from "./components/Routes";
 
 const App = () => {

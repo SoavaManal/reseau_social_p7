@@ -1,4 +1,7 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+
 const removeJwt = () => {
   localStorage.removeItem("jwt");
 };
@@ -10,11 +13,7 @@ const Logout = () => {
   return (
     <div>
       <li onClick={logout}>
-        <img
-          alt="icons pour se déconnecter"
-          src="./image/icons/logout.svg"
-          className="navigation-logout"
-        />
+        <FontAwesomeIcon icon={faRightFromBracket}></FontAwesomeIcon>
       </li>
     </div>
   );
