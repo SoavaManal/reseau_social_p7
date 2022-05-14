@@ -2,3 +2,55 @@
     width: 80%;
     text-align: center;
 }
+.post{
+    border:1px solid black;
+    border-radius: 20px;
+    margin:20px;
+    h3{
+        text-align:center;
+        text-decoration:underline;
+    }
+    &-profil{
+        display: flex;
+        
+        align-items: center;
+        &-img{
+
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            padding-right: 15px;
+        }
+    }
+    &-barre{
+        display: flex;
+        justify-content: center;
+        p{
+            padding-left: 10px;
+            padding-right: 10px;
+            margin: 0;
+        }
+    }
+    &-img{
+        width: 450px;
+        height: 300px;
+        align-items: center;
+    }
+}
+.comment{
+    display: flex;
+    justify-content: space-between;
+    textarea{
+
+        border:1px solid black;
+        width: 85%;
+        text-align: center;
+    }
+    &-icons{
+        font-size: 22px;
+    }
+    ul{
+        display: block;
+        width: 100%;
+    }
+}

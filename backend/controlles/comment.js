@@ -11,9 +11,11 @@ exports.createComment = (req, res, next) => {
             userId: user.id,
             postId: post.id,
             content: req.body.content,
-            image_url: `${req.protocol}://${req.get("host")}/images/${
-              req.file.filename
-            }`,
+            image_url: req.file
+              ? `${req.protocol}://${req.get("host")}/images/${
+                  req.file.filename
+                }`
+              : null,
           })
           .then(() => res.status(201).json("comment created!!"))
           .catch((error) => res.status(404).json({ error }));
