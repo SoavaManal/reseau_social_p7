@@ -1,9 +1,13 @@
 .account{
-    background: white;
-    border-radius: 20px;
+   
+    border-radius: 5px;
     margin: 30px;
+    
     &-icons{
-        margin-top: -70px;
+        font-size: 27px;
+        padding: 10px;
+        
+
     }
 }
 .navigation-active{

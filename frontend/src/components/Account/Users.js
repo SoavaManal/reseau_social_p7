@@ -26,7 +26,7 @@ const Users = () => {
     getUsers();
   }, []);
   return (
-    <div>
+    <div className="right-container">
       <h1>COMMUNAUTEE</h1>
       <div className="users">
         <ul>

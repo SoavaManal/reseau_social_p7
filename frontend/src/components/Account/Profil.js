@@ -9,6 +9,7 @@ const Profil = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [bio, setBio] = useState("");
+  const [image, setImage] = useState();
 
   const getProfil = () => {
     axios({
@@ -35,6 +36,7 @@ const Profil = () => {
         Authorization: token,
       },
       data: {
+        image: image,
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -62,23 +64,44 @@ const Profil = () => {
   };
   useEffect(() => {
     getProfil();
-    updateProfil();
   }, []);
 
   return user == null ? (
     "loading"
   ) : (
     <>
-      <div id="profil">
-        <h1>Profil de {user.firstName}</h1>
-        <ul className="profil">
-          <li>
-            <img src={user.image ? user.image : "./image/anonyme.PNG"} />
+      <div id="profil" className="right-container card-post">
+        <div className="flex">
+          <div>
+            <img
+              src={user.image ? user.image : "/images/anonyme.PNG"}
+              alt="profil"
+            />
+            <br />
             <label htmlFor="changer photo de profil">
               Changer la photo de profil
             </label>
-            <input type="file" name="file" accept=".jpg .jpeg .png" multiple />
-          </li>
+            <br />
+            {image === null ? (
+              ""
+            ) : (
+              <input
+                type="file"
+                id="file"
+                name="file"
+                accept=".jpg, .jpeg, .png"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
+            )}
+          </div>
+          <div>
+            <h2>
+              {user.firstName} {user.lastName}
+            </h2>
+            <h3>{user.email}</h3>
+          </div>
+        </div>
+        <ul className="profil">
           <li>
             Prénom :
             <input
@@ -113,8 +136,8 @@ const Profil = () => {
           </li>
         </ul>
       </div>
-      <button onClick={updateProfil}>Modifier mon Profil</button>
-      <button onClick={deleteUser}>Supprimer mon compte</button>
+      <button onClick={() => updateProfil()}>Modifier mon Profil</button>
+      <button onClick={() => deleteUser()}>Supprimer mon compte</button>
     </>
   );
 };

@@ -11,11 +11,10 @@ const Logout = () => {
     window.location = "/";
   };
   return (
-    <div>
-      <li onClick={logout}>
-        <FontAwesomeIcon icon={faRightFromBracket}></FontAwesomeIcon>
-      </li>
-    </div>
+    <FontAwesomeIcon
+      icon={faRightFromBracket}
+      onClick={logout}
+    ></FontAwesomeIcon>
   );
 };
 

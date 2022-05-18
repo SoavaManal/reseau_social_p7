@@ -26,14 +26,12 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="createpost">
+    <div className="card-post">
       <textarea
         defaultValue="Quoi de neuf ?"
         id="post"
         onChange={(e) => setContent(e.target.value)}
       ></textarea>
-      <br />
-      <label htmlFor="ajouter une image">Ajouter une image</label>
       <br />
       <input
         type="file"
@@ -43,7 +41,11 @@ const CreatePost = () => {
         onChange={(e) => setImagePost(e.target.value)}
       />
       <br />
-      <input type="submit" value="Publier" onClick={userPost} />
+      {submitPost == null ? (
+        ""
+      ) : (
+        <input type="submit" value="Publier" onClick={userPost} />
+      )}
     </div>
   );
 };

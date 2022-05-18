@@ -5,8 +5,8 @@ const UserCard = ({ user }) => {
     <div className="card">
       <li>
         <img
-          src={user.image ? user.image : "./image/anonyme.png"}
-          alt="photo d'utilisateur"
+          src={user.image ? user.image : "/images/anonyme.png"}
+          alt="profil"
         />
       </li>
       <div className="infos">

@@ -1,7 +1,7 @@
 .navigation{
     display: flex;
     align-items:center;
-    justify-content: space-between;
+    justify-content: space-around;
     &-header{
         font-weight:normal;
         font-size: 22px;
@@ -9,6 +9,14 @@
         padding-top: 20px;
         position: relative;
         
+    }
+    img{
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+    h4{
+      padding-left: 10px;
     }
     &-logout{
       width: 30px;

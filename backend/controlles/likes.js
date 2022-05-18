@@ -24,25 +24,25 @@ exports.likes = (req, res, next) => {
               })
               .catch((error) => res.status(404).json({ error }));
           } else {
-            // post
-            //   .update(
-            //     { likes: post.likes - 1 },
-            //     { where: { id: req.params.id } }
-            //   )
-            //   .then(() => {
-            //     res.status(201).json({ message: "The like is removed!" });
-            //   })
-            //   .catch();
-            // models.usersliked
-            //   .destory()
-            //   .then(() =>
-            //     res
-            //       .status(200)
-            //       .json({ message: "user is removed from usersLiked" })
-            //   )
-            //   .catch();
+            post
+              .update(
+                { likes: post.likes - 1 },
+                { where: { id: req.params.id } }
+              )
+              .then(() => {
+                res.status(201).json({ message: "The like is removed!" });
+              })
+              .catch();
+            models.usersliked
+              .destroy()
+              .then(() =>
+                res
+                  .status(200)
+                  .json({ message: "user is removed from usersLiked" })
+              )
+              .catch();
             // });
-            return res.status(409).json({ message: "Post already liked" });
+            // return res.status(409).json({ message: "Post already liked" });
           }
         });
       //.catch((error) => res.status(500).json({ error }));

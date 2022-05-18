@@ -13,7 +13,7 @@
   body{
       font-family: $font-1;
       color: rgb(45, 36, 30);
-      background: url("../../public/image/solidarite.jpg") no-repeat;
+      background: url("../../public/images/solidarite.jpg") no-repeat;
       background-size: 100%;  
        @media(max-width:510px) {
          background:none;
@@ -55,22 +55,32 @@ textarea {
     box-shadow: 0 0 4px rgba(0, 22, 44, 0.1);
   }
 }
-// button,
-// input[type="submit"] {
-//   background: $color-2;
-//   color: $color-1;
-//   cursor: pointer;
-//   transition: 0.2s;
-//   margin: 0;
-//   padding: 10px 20px;
-//   border-radius: 20px 6px 20px 20px;
+button,
+input[type="submit"] {
+  background: $color-2;
+  color: $color-1;
+  cursor: pointer;
+  transition: 0.2s;
+  margin: 0;
+  padding: 10px 20px;
+  border-radius: 20px 6px 20px 20px;
 
-//   &:hover {
-//     background: $color-1;
-//     color: $color-2;
-//   }
-// }
+  &:hover {
+    background: $color-1;
+    color: $color-2;
+  }
+}
 h1{
   text-align: center;
   color: $color-orange;
+}
+h2{
+  text-transform: capitalize;
+}
+.right-container{
+  margin-left: 8%;
+  margin-top: -150px;
+}
+.flex{
+  display: flex;
 }

@@ -1,3 +1,19 @@
+.card-post{
+    border:1px solid white;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 5px 5px  10px gray;
+    margin-bottom: 20px;
+    textarea{
+        margin:10px auto 10px;
+    }
+    input{
+        margin:10px auto 10px;
+    }
+    button{
+        margin-right: 0px;
+    }
+}
 #post{
     width: 80%;
     text-align: center;
@@ -19,7 +35,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            padding-right: 15px;
+            padding: 10px;
         }
     }
     &-barre{
@@ -32,19 +48,26 @@
         }
     }
     &-img{
-        width: 450px;
-        height: 300px;
+        width: 70%;
+        height:400px;
         align-items: center;
     }
 }
 .comment{
-    display: flex;
-    justify-content: space-between;
-    textarea{
-
-        border:1px solid black;
-        width: 85%;
-        text-align: center;
+    background-color: #c2c2c2;
+    margin-bottom: 10px;
+    width: 70%;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right:auto;
+    input{
+        margin-left:10px;
+        margin-right:20px;
+        width: 70%;
+    }
+    img{
+        width: 200px;
+        height: 150px;
     }
     &-icons{
         font-size: 22px;
@@ -52,5 +75,17 @@
     ul{
         display: block;
         width: 100%;
+    }
+    &-owner{
+       background-color: #c2c2c2;
+       margin-bottom: 10px;
+       width: 70%;
+       border-radius: 5px;
+       margin-left: auto;
+       margin-right:auto;
+        img{
+            width: 200px;
+            height: 150px;
+        }
     }
 }
