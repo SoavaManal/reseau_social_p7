@@ -14,6 +14,7 @@ const Logout = () => {
     <FontAwesomeIcon
       icon={faRightFromBracket}
       onClick={logout}
+      className="logout"
     ></FontAwesomeIcon>
   );
 };

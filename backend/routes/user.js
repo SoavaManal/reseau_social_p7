@@ -10,5 +10,6 @@ router.get("/me", auth, userControl.getUserInfo);
 router.get("/", auth, userControl.getAllUser); //fait coté frontend
 router.put("/me", auth, multer, userControl.updateUserInfo);
 router.delete("/me", auth, multer, userControl.deleteUser);
+router.delete("/:id", auth, multer, userControl.deleteBadUsers);
 
 module.exports = router;

@@ -9,7 +9,7 @@ const Profil = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [bio, setBio] = useState("");
-  const [image, setImage] = useState();
+  const [file, setFile] = useState();
 
   const getProfil = () => {
     axios({
@@ -28,7 +28,6 @@ const Profil = () => {
       .catch((error) => console.log(error));
   };
   const updateProfil = () => {
-    //e.preventDefault();
     axios({
       method: "PUT",
       url: `http://localhost:3000/api/auth/me`,
@@ -36,7 +35,7 @@ const Profil = () => {
         Authorization: token,
       },
       data: {
-        image: image,
+        image: file,
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -48,6 +47,7 @@ const Profil = () => {
       })
       .catch((error) => console.log(error));
   };
+
   const deleteUser = () => {
     axios({
       method: "delete",
@@ -71,29 +71,36 @@ const Profil = () => {
   ) : (
     <>
       <div id="profil" className="right-container card-post">
-        <div className="flex">
-          <div>
-            <img
-              src={user.image ? user.image : "/images/anonyme.PNG"}
-              alt="profil"
-            />
-            <br />
-            <label htmlFor="changer photo de profil">
-              Changer la photo de profil
-            </label>
-            <br />
-            {image === null ? (
-              ""
-            ) : (
-              <input
-                type="file"
-                id="file"
-                name="file"
-                accept=".jpg, .jpeg, .png"
-                onChange={(e) => setImage(e.target.files[0])}
+        <div className="profil">
+          {file === null ? (
+            ""
+          ) : (
+            <div>
+              <img
+                src={user.image ? user.image : "/images/anonyme.PNG"}
+                alt="profil"
               />
-            )}
-          </div>
+
+              <br />
+              <label for="file" class="label-file">
+                Changer la photo de profil
+              </label>
+
+              <input
+                id="file"
+                class="input-file"
+                type="file"
+                accept=".jpg, .jpeg, .png"
+                onChange={(e) => setFile(e.target.files)}
+              />
+              <br />
+              <input
+                type="submit"
+                value="Modifier"
+                onClick={() => updateProfil()}
+              />
+            </div>
+          )}
           <div>
             <h2>
               {user.firstName} {user.lastName}
@@ -103,7 +110,8 @@ const Profil = () => {
         </div>
         <ul className="profil">
           <li>
-            Prénom :
+            <label for="prenom">Prénom :</label>
+
             <input
               defaultValue={user.firstName}
               type="text"
@@ -111,7 +119,7 @@ const Profil = () => {
             />
           </li>
           <li>
-            Nom :
+            <label for="nom">Nom :</label>
             <input
               defaultValue={user.lastName}
               type="text"
@@ -119,7 +127,7 @@ const Profil = () => {
             />
           </li>
           <li>
-            Email :
+            <label for="email">Email :</label>
             <input
               defaultValue={user.email}
               type="email"
@@ -127,7 +135,7 @@ const Profil = () => {
             />
           </li>
           <li>
-            Bio:
+            <label for="bio">Bio :</label>
             <textarea
               defaultValue={user.bio ? user.bio : "Parlez-nous un peu de vous"}
               type="text"

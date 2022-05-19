@@ -5,7 +5,7 @@ import UserCard from "./UserCard";
 const Users = () => {
   const getToken = localStorage.getItem("jwt");
   const token = "Bearer " + getToken;
-  const [user, setUser] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const getUsers = () => {
     return axios({
@@ -16,21 +16,22 @@ const Users = () => {
       },
     })
       .then((res) => {
-        setUser(res.data);
+        setUsers(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   useEffect(() => {
     getUsers();
   }, []);
   return (
     <div className="right-container">
       <h1>COMMUNAUTEE</h1>
-      <div className="users">
+      <div>
         <ul>
-          {user.map((user) => (
+          {users.map((user) => (
             <UserCard key={user.id} user={user} />
           ))}
         </ul>

@@ -28,11 +28,16 @@ const NavigationBarre = () => {
     <>
       {user != null ? (
         <div className="navigation account">
-          <img alt="logo groupomania" src="/images/logo2.png" />
+          <img
+            alt="logo groupomania"
+            src="/images/logo2.png"
+            className="logo-acceuil"
+          />
           <div className="navigation">
             <img
               src={user.image ? user.image : "/images/anonyme.png"}
               alt="profil"
+              className="navigation-img"
             />
 
             <h4>Bienvenue {user.firstName}</h4>

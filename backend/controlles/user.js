@@ -110,7 +110,15 @@ exports.login = (req, res, next) => {
 exports.getUserInfo = (req, res, next) => {
   models.user
     .findOne({
-      attributes: ["id", "firstName", "lastName", "email", "bio", "image"],
+      attributes: [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+        "bio",
+        "image",
+        "isAdmin",
+      ],
       where: { id: req.auth.userId },
     })
     .then((user) => {
@@ -148,15 +156,16 @@ exports.updateUserInfo = (req, res, next) => {
       if (user.id != req.auth.userId) {
         return res.status(401).json({ error: "unauthorized request" });
       }
-      console.log(user.id);
       if (req.file) {
-        const filename = user.image.split("/images")[1]; //le nom de l'image a supprimer
-        fs.unlink(`images/${filename}`, function (error) {
-          //supression de l'ancienne image
-          if (error) {
-            throw error;
-          }
-        });
+        if (user.image !== null) {
+          const filename = user.image.split("/images")[1]; //le nom de l'image a supprimer
+          fs.unlink(`images/${filename}`, function (error) {
+            //supression de l'ancienne image
+            if (error) {
+              throw error;
+            }
+          });
+        }
       }
       user
         .update(
@@ -173,8 +182,8 @@ exports.updateUserInfo = (req, res, next) => {
           res.status(201).json({ message: "profile has been modified" })
         )
         .catch(() => res.status(400).json({ error: "bad request" }));
-    })
-    .catch(() => res.status(500).json({ error: "can't access the database" }));
+    });
+  // .catch(() => res.status(500).json({ error: "can't access the database" }));
 };
 
 //suppression du compte
@@ -192,6 +201,36 @@ exports.deleteUser = (req, res, next) => {
             )
             .catch(() => res.status(400).json({ error: "bad request" }));
         });
+      } else {
+        return res.status(401).json({ error: "unauthorized request" });
+      }
+    })
+    .catch(() => res.status(500).json({ error: "can't access the database" }));
+};
+
+exports.deleteBadUsers = (req, res, next) => {
+  models.user
+    .findOne({ where: { id: req.params.id } })
+    .then((user) => {
+      if (req.auth.isAdmin == 1) {
+        if (user.image !== null) {
+          const filename = user.image.split("/images")[1];
+          fs.unlink(`images/${filename}`, () => {
+            user
+              .destroy({ where: { id: req.auth.userId } })
+              .then(() =>
+                res.status(200).json({ message: "user has been deleted" })
+              )
+              .catch(() => res.status(400).json({ error: "bad request" }));
+          });
+        } else {
+          user
+            .destroy({ where: { id: req.params.id } })
+            .then(() =>
+              res.status(200).json({ message: "user has been deleted" })
+            )
+            .catch(() => res.status(400).json({ error: "bad request" }));
+        }
       } else {
         return res.status(401).json({ error: "unauthorized request" });
       }
