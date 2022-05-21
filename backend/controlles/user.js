@@ -141,8 +141,6 @@ exports.getAllUser = (req, res, next) => {
 };
 //modifier le profile
 exports.updateUserInfo = (req, res, next) => {
-  var firstName = req.body.firstName;
-  var lastName = req.body.lastName;
   var bio = req.body.bio;
   var image = req.file
     ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
@@ -170,11 +168,8 @@ exports.updateUserInfo = (req, res, next) => {
       user
         .update(
           {
-            firstName: firstName ? firstName : user.firstName,
-            lastName: lastName ? lastName : user.lastName,
             image: image ? image : user.image,
             bio: bio ? bio : user.bio,
-            image: image ? image : user.image,
           },
           { where: { id: req.auth.userId } }
         )

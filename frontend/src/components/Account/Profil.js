@@ -5,11 +5,8 @@ const Profil = () => {
   const getToken = localStorage.getItem("jwt");
   const token = "Bearer " + getToken;
   const [user, setUser] = useState();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
   const [bio, setBio] = useState("");
-  const [file, setFile] = useState();
+  const [image, setImage] = useState();
 
   const getProfil = () => {
     axios({
@@ -28,19 +25,16 @@ const Profil = () => {
       .catch((error) => console.log(error));
   };
   const updateProfil = () => {
+    let formData = new FormData();
+    formData.append("image", image);
+    formData.append("bio", bio);
     axios({
       method: "PUT",
       url: `http://localhost:3000/api/auth/me`,
       headers: {
         Authorization: token,
       },
-      data: {
-        image: file,
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        bio: bio,
-      },
+      data: formData,
     })
       .then((res) => {
         setUser(res.data);
@@ -62,6 +56,16 @@ const Profil = () => {
       })
       .catch((error) => console.log(error));
   };
+  const HandelDelete = () => {
+    if (
+      window.confirm(
+        "Voulez-vous bien supprimer votre compte chez Groupomania?"
+      )
+    ) {
+      deleteUser();
+    }
+  };
+
   useEffect(() => {
     getProfil();
   }, []);
@@ -70,11 +74,16 @@ const Profil = () => {
     "loading"
   ) : (
     <>
-      <div id="profil" className="right-container card-post">
+      <div id="profil" className="right-container profil-container">
         <div className="profil">
-          {file === null ? (
-            ""
-          ) : (
+          <h1>
+            {user.firstName} {user.lastName}
+          </h1>
+          <h2>{user.email}</h2>
+          <button onClick={() => HandelDelete()}>Supprimer mon compte</button>
+        </div>
+        <div className="update-container">
+          <div className="left-part">
             <div>
               <img
                 src={user.image ? user.image : "/images/anonyme.PNG"}
@@ -82,70 +91,43 @@ const Profil = () => {
               />
 
               <br />
-              <label for="file" class="label-file">
+              <label htmlFor="file" className="label-file">
                 Changer la photo de profil
               </label>
 
               <input
                 id="file"
-                class="input-file"
+                className="input-file"
                 type="file"
                 accept=".jpg, .jpeg, .png"
-                onChange={(e) => setFile(e.target.files)}
+                onChange={(e) => {
+                  setImage(e.target.files[0]);
+                }}
               />
               <br />
-              <input
-                type="submit"
-                value="Modifier"
-                onClick={() => updateProfil()}
-              />
+              {image == null ? (
+                ""
+              ) : (
+                <input
+                  type="submit"
+                  value="Modifier"
+                  onClick={() => updateProfil()}
+                />
+              )}
             </div>
-          )}
-          <div>
-            <h2>
-              {user.firstName} {user.lastName}
-            </h2>
-            <h3>{user.email}</h3>
           </div>
-        </div>
-        <ul className="profil">
-          <li>
-            <label for="prenom">Prénom :</label>
-
-            <input
-              defaultValue={user.firstName}
-              type="text"
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </li>
-          <li>
-            <label for="nom">Nom :</label>
-            <input
-              defaultValue={user.lastName}
-              type="text"
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </li>
-          <li>
-            <label for="email">Email :</label>
-            <input
-              defaultValue={user.email}
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </li>
-          <li>
-            <label for="bio">Bio :</label>
+          <div className="right-part">
+            <label htmlFor="bio">Bio :</label>
             <textarea
               defaultValue={user.bio ? user.bio : "Parlez-nous un peu de vous"}
               type="text"
               onChange={(e) => setBio(e.target.value)}
             ></textarea>
-          </li>
-        </ul>
+            <br />
+            <button onClick={() => updateProfil()}>Modifier</button>
+          </div>
+        </div>
       </div>
-      <button onClick={() => updateProfil()}>Modifier mon Profil</button>
-      <button onClick={() => deleteUser()}>Supprimer mon compte</button>
     </>
   );
 };

@@ -71,7 +71,7 @@ input[type="submit"] {
   margin: 0;
   padding: 10px 20px;
   border-radius: 20px 6px 20px 20px;
-
+  border:none;
   &:hover {
     background: $color-1;
     color: $color-2;
@@ -80,9 +80,6 @@ input[type="submit"] {
 h1{
   text-align: center;
   color: $color-orange;
-}
-h2{
-  text-transform: capitalize;
 }
 .right-container{
   margin-left: 8%;
