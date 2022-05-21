@@ -1,5 +1,5 @@
 .card-post{
-    border:1px solid white;
+    border:1px solid #fdeeee;
     background: white;
     border-radius: 5px;
     box-shadow: 5px 5px  10px gray;
@@ -7,8 +7,13 @@
     width: 70%;
     margin-left: auto;
     margin-right: auto;
+    background-color: #fdeeee;
     textarea{
         margin:10px auto 10px;
+        width: 99%;
+        border-radius: 20px 20px 5px 20px;
+        text-align: center;
+      
     }
     input{
         margin:10px auto 10px;
@@ -17,11 +22,8 @@
         margin-left: auto;
         margin-right: 0; 
         border:none;
+        
     }
-}
-#post{
-    width: 80%;
-    text-align: center;
 }
 .post{
     border:1px solid black;

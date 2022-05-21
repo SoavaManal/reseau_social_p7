@@ -70,7 +70,9 @@ const Profil = () => {
     getProfil();
   }, []);
 
-  return user == null ? (
+  //prograide.com/pregunta/34671/Supprimer-la-valeur-par-defaut-d39un-texte-saisi-au-clic
+
+  Source: https: return user == null ? (
     "loading"
   ) : (
     <>
@@ -119,7 +121,7 @@ const Profil = () => {
           <div className="right-part">
             <label htmlFor="bio">Bio :</label>
             <textarea
-              defaultValue={user.bio ? user.bio : "Parlez-nous un peu de vous"}
+              placeholder={user.bio ? user.bio : "Présentez-vous!"}
               type="text"
               onChange={(e) => setBio(e.target.value)}
             ></textarea>

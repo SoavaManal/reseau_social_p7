@@ -1,12 +1,15 @@
 
 .profil{
-    background: #fdeeee;
+      background: #fdeeee;
       border-radius: 20px;
       padding: 25px;
       margin: 20px 10px;
       text-align: center;
       h1{
         text-transform: capitalize;
+      }
+      button{
+          border-radius: 20px;
       }
 }
 .update-container {
