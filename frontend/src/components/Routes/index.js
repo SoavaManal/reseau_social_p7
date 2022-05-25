@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Account from "../../pages/Account";
 import Home from "../../pages/Home";
-import Acceuil from "../Account/Acceuil";
 
 const Routers = () => {
   return (

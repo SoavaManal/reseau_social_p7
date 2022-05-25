@@ -36,7 +36,7 @@ exports.updateComment = (req, res, next) => {
         if (req.file) {
           if (comment.image_url != null) {
             const filename = comment.image_url.split("/images")[1]; //le nom de l'image a supprimer
-            fs.unlink(`images/${filename}`, function (error) {
+            fs.unlink(`image/${filename}`, function (error) {
               //supression de l'ancienne image
               if (error) {
                 throw error;
@@ -109,7 +109,7 @@ exports.readComment = (req, res, next) => {
       include: [
         {
           model: models.user,
-          attributes: ["firstName", "lastName"],
+          attributes: ["firstName", "lastName", "image"],
         },
       ],
     })

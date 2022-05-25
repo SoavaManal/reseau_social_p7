@@ -68,9 +68,9 @@ input[type="submit"] {
   color: $color-1;
   cursor: pointer;
   transition: 0.2s;
-  margin: 0;
+  margin-top:15px;
   padding: 10px 20px;
-  border-radius: 20px 6px 20px 20px;
+  border-radius: 20px;
   border:none;
   &:hover {
     background: $color-1;
@@ -81,13 +81,21 @@ input[type="submit"] {
 input[type="file"] {
   position: absolute;
   opacity: 0;
-  cursor: pointer;
-  padding: 10px 20px;
+  width: 20px;
+  height: 20px;
   
 }
+.label-file{
+  position: absolute;
+  
+}
+
 h1{
   text-align: center;
   color: $color-orange;
+}
+h4{
+  text-transform: capitalize;
 }
 .right-container{
   margin-left: 8%;
@@ -95,13 +103,35 @@ h1{
 }
 .flex{
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .logout{
   font-size: 25px;
 }
 label {
-  width: 110px;
   display: inline-block;
   vertical-align: top;
   margin: 6px;
+  cursor: pointer;
+}
+
+.flex-space{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+p{
+  text-align: center;
+}
+.date{
+  color:#A9A9A9;
+  padding-right:5px;
+  font-size: 12px;
+}
+.profil-pic{
+  width: 55px;
+  height: 40px;
+  border-radius: 20px;
+  padding: 10px;
 }

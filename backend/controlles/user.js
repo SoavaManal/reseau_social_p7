@@ -106,7 +106,7 @@ exports.login = (req, res, next) => {
     .catch(() => res.status(500).json({ errors: "can't access the database" }));
 };
 
-//Read the profile of users
+//le profil d'utilisateur
 exports.getUserInfo = (req, res, next) => {
   models.user
     .findOne({
@@ -139,6 +139,7 @@ exports.getAllUser = (req, res, next) => {
     .then((user) => res.status(200).json(user))
     .catch(() => res.status(400).json({ error: "bad request" }));
 };
+
 //modifier le profile
 exports.updateUserInfo = (req, res, next) => {
   var bio = req.body.bio;
@@ -181,7 +182,7 @@ exports.updateUserInfo = (req, res, next) => {
   // .catch(() => res.status(500).json({ error: "can't access the database" }));
 };
 
-//suppression du compte
+//suppression du compte par utilisateur
 exports.deleteUser = (req, res, next) => {
   models.user
     .findOne({ where: { id: req.auth.userId } })
@@ -203,6 +204,7 @@ exports.deleteUser = (req, res, next) => {
     .catch(() => res.status(500).json({ error: "can't access the database" }));
 };
 
+//suppression du compte par admin
 exports.deleteBadUsers = (req, res, next) => {
   models.user
     .findOne({ where: { id: req.params.id } })

@@ -5,6 +5,8 @@ import {
   faDeleteLeft,
   faPaperPlane,
   faPen,
+  faImage,
+  faFileImage,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Comment = ({ post }) => {
@@ -12,27 +14,11 @@ const Comment = ({ post }) => {
   const [comment, setComment] = useState([]);
   const [content, setContent] = useState("");
   const [image, setImage] = useState();
-  const [sendComment, setSendComment] = useState();
+  const [sendComment, setSendComment] = useState(false);
   const [contentUp, setContenteUp] = useState("");
   const [imageUp, setImageUp] = useState();
   const [update, setUpdate] = useState();
   const [user, setUser] = useState();
-
-  const createComment = (id) => {
-    axios({
-      method: "post",
-      url: `http://localhost:3000/api/posts/${id}/comment`,
-      headers: {
-        Authorization: token,
-      },
-      data: {
-        content: content,
-        image: image,
-      },
-    })
-      .then((res) => setSendComment(res.data))
-      .catch((error) => console.log(error));
-  };
 
   const readComment = (id) => {
     axios({
@@ -48,35 +34,105 @@ const Comment = ({ post }) => {
       .catch((error) => console.log(error));
   };
 
-  const updateComment = (postId, commentId) => {
-    axios({
-      method: "put",
-      url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
-      headers: {
-        Authorization: token,
-      },
-      data: {
-        content: contentUp,
-        image: imageUp,
-      },
-    })
-      .then((res) => {
-        setUpdate(res.data);
-        console.log("commentaire modifié", res.data);
+  const createComment = (id) => {
+    if (content || image) {
+      let formData = new FormData();
+      formData.append("content", content);
+      formData.append("image", image);
+      axios({
+        method: "post",
+        url: `http://localhost:3000/api/posts/${id}/comment`,
+        headers: {
+          Authorization: token,
+        },
+        data: formData,
       })
-      .catch((error) => console.log(error));
+        .then(() => {
+          setSendComment(true);
+          readComment();
+        })
+        .catch((error) => console.log(error));
+    } else {
+      alert("Entrer un commentaire!");
+    }
+  };
+
+  const updateComment = (postId, commentId) => {
+    if (contentUp || imageUp) {
+      if (contentUp) {
+        let formData = new FormData();
+        formData.append("content", contentUp);
+        axios({
+          method: "put",
+          url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
+          headers: {
+            Authorization: token,
+          },
+          data: formData,
+        })
+          .then((res) => {
+            setUpdate(res.data);
+            console.log("commentaire modifié", update);
+          })
+          .catch((error) => console.log(error));
+      }
+      if (imageUp) {
+        let formData = new FormData();
+        formData.append("image", imageUp);
+        axios({
+          method: "put",
+          url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
+          headers: {
+            Authorization: token,
+          },
+          data: formData,
+        })
+          .then((res) => {
+            setUpdate(res.data);
+            console.log("commentaire modifié");
+            readComment();
+          })
+          .catch((error) => console.log(error));
+      }
+      if (contentUp && imageUp) {
+        let formData = new FormData();
+        formData.append("content", contentUp);
+        formData.append("image", imageUp);
+        axios({
+          method: "put",
+          url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
+          headers: {
+            Authorization: token,
+          },
+          data: formData,
+        })
+          .then((res) => {
+            setUpdate(res.data);
+            console.log("commentaire modifié");
+            readComment();
+          })
+          .catch((error) => console.log(error));
+      }
+    } else {
+      alert("Aucun modification apporter!");
+    }
   };
 
   const deleteComment = (postId, commentId) => {
-    axios({
-      method: "delete",
-      url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
-      headers: {
-        Authorization: token,
-      },
-    })
-      .then(() => console.log("commentaire supprimer"))
-      .catch((error) => console.log(error));
+    if (window.confirm("voulez vous supprimer votre commentaire?")) {
+      axios({
+        method: "delete",
+        url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
+        headers: {
+          Authorization: token,
+        },
+      })
+        .then(() => {
+          console.log("commentaire supprimer");
+          readComment();
+        })
+        .catch((error) => console.log(error));
+    }
   };
   const getProfil = () => {
     axios({
@@ -91,77 +147,85 @@ const Comment = ({ post }) => {
     })
       .then((res) => {
         setUser(res.data);
-        //console.log("le user qui comment", res.data);
       })
       .catch((error) => console.log(error));
   };
   useEffect(() => {
     getProfil();
     readComment(post.id);
-  });
+  }, []);
 
   return (
     <div>
-      <div className="comment-owner">
+      <div className="comment">
         <div className="flex">
-          <h4>
-            {post.user.firstName} {post.user.lastName}
-          </h4>
+          {user ? (
+            <>
+              <div className="flex">
+                <img src={user.image} alt="profil-pic" className="profil-pic" />
+                <h4>{user.firstName}</h4>
+              </div>
+              <input
+                type="text"
+                placeholder="Ajouter un commentaire..."
+                onChange={(e) => setContent(e.target.value)}
+              />
+              <FontAwesomeIcon
+                icon={faPaperPlane}
+                className="comment-icons"
+                onClick={() => {
+                  console.log(sendComment);
+                  createComment(post.id);
+                }}
+              ></FontAwesomeIcon>
+            </>
+          ) : (
+            ""
+          )}
+        </div>
+        <div>
+          <label htmlFor="file" className="label-file">
+            <FontAwesomeIcon icon={faImage}></FontAwesomeIcon>
+          </label>
           <input
-            type="text"
-            defaultValue="Ajouter un commentaire..."
-            onChange={(e) => setContent(e.target.value)}
+            type="file"
+            id="file"
+            onChange={(e) => setImage(e.target.files[0])}
           />
         </div>
-        <input type="file" onChange={(e) => setImage(e.target.value)} />
-        {sendComment === null ? (
-          ""
-        ) : (
-          <FontAwesomeIcon
-            icon={faPaperPlane}
-            className="comment-icons"
-            onClick={() => createComment(post.id)}
-          ></FontAwesomeIcon>
-        )}
       </div>
-      {comment == null
-        ? ""
-        : comment.map((comment) => (
-            <div
-              key={comment.id}
-              className={
-                comment.userId === post.userId ? "comment-owner" : "comment"
-              }
-            >
-              <div className="flex">
-                <h4>
-                  {comment.user.firstName} {comment.user.lastName}
-                </h4>
-                <input
-                  type="text"
-                  defaultValue={comment.content}
-                  onChange={(e) => setContenteUp(e.target.value)}
-                />
-                <p>{comment.createdAt.split("T")[0]}</p>
-              </div>
-              {comment.image_url ? (
-                <img src={comment.image_url} alt="commentaire" />
-              ) : (
-                ""
-              )}
-              {update === null ? (
-                ""
-              ) : (
-                <button onClick={() => updateComment(post.id, comment.id)}>
-                  <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
-                </button>
-              )}
-
-              <button onClick={() => deleteComment(post.id, comment.id)}>
-                <FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon>
-              </button>
-            </div>
-          ))}
+      <div className="comment" key={comment.id}>
+        {comment
+          ? comment.map((comment) => (
+              <>
+                {post && post.id === comment.postId ? (
+                  <>
+                    <div className="flex">
+                      <img
+                        src={comment.user.image}
+                        alt="profil-pic"
+                        className="profil-pic"
+                      />
+                      <h4>{comment.user.firstName}</h4>
+                      {user && user.id === comment.userId ? (
+                        <input type="text" defaultValue={comment.content} />
+                      ) : (
+                        <p>{comment.content}</p>
+                      )}
+                      <p className="date">{comment.createdAt.split("T")[0]}</p>
+                    </div>
+                    <img
+                      src={comment.image_url ? comment.image_url : ""}
+                      alt={comment.image_url ? "commentaire-pic" : ""}
+                    />
+                  </>
+                ) : (
+                  ""
+                )}
+              </>
+            ))
+          : ""}
+      </div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ const Profil = () => {
   const [user, setUser] = useState();
   const [bio, setBio] = useState("");
   const [image, setImage] = useState();
+  //const[state,SetState]=useState(null)
 
   const getProfil = () => {
     axios({
@@ -38,6 +39,7 @@ const Profil = () => {
     })
       .then((res) => {
         setUser(res.data);
+        getProfil();
       })
       .catch((error) => console.log(error));
   };
@@ -70,9 +72,7 @@ const Profil = () => {
     getProfil();
   }, []);
 
-  //prograide.com/pregunta/34671/Supprimer-la-valeur-par-defaut-d39un-texte-saisi-au-clic
-
-  Source: https: return user == null ? (
+  return user == null ? (
     "loading"
   ) : (
     <>
@@ -113,7 +113,9 @@ const Profil = () => {
                 <input
                   type="submit"
                   value="Modifier"
-                  onClick={() => updateProfil()}
+                  onClick={() => {
+                    updateProfil();
+                  }}
                 />
               )}
             </div>

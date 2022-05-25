@@ -98,6 +98,10 @@ exports.readAllPost = (req, res, next) => {
     .findAll({
       include: [
         {
+          model: models.comment,
+          attributes: ["content", "image_url"],
+        },
+        {
           model: models.user,
           attributes: ["firstName", "lastName", "image"],
         },

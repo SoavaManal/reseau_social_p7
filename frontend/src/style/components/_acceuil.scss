@@ -1,3 +1,7 @@
+.float{
+    display: flex;
+    flex-direction: column-reverse;
+}
 .card-post{
     border:1px solid #fdeeee;
     background: white;
@@ -8,15 +12,28 @@
     margin-left: auto;
     margin-right: auto;
     background-color: #fdeeee;
+    
     textarea{
         margin:10px auto 10px;
-        width: 99%;
+        width: 90%;
+        height: 40px;
         border-radius: 20px 20px 5px 20px;
         text-align: center;
+        
       
     }
-    input{
-        margin:10px auto 10px;
+    label{
+        .icons{
+            font-size: 25px;
+        }
+        .icons:hover{
+            color:$color-orange;
+        }
+    }
+    input[type="submit"]{
+        margin-right:0px;
+        margin: 10px;
+       border-radius: 20px;
     }
     button{
         margin-left: auto;
@@ -57,24 +74,19 @@
     &-img{
         width: 70%;
         height:400px;
-        align-items: center;
+        border-radius: 5px;
+        margin-left:15%;
     }
 }
 .comment{
-    background-color: #c2c2c2;
+    background-color: $color-2;
     margin-bottom: 10px;
     width: 70%;
     border-radius: 5px;
     margin-left: auto;
     margin-right:auto;
-    input{
-        margin-left:10px;
-        margin-right:20px;
-        width: 70%;
-    }
-    img{
-        width: 200px;
-        height: 150px;
+    textarea{
+        width: 170%;
     }
     &-icons{
         font-size: 22px;
@@ -83,16 +95,11 @@
         display: block;
         width: 100%;
     }
-    &-owner{
-       background-color: #c2c2c2;
-       margin-bottom: 10px;
-       width: 70%;
+   &-img{
+       width: 50%;
+       max-height:150px ;
        border-radius: 5px;
-       margin-left: auto;
-       margin-right:auto;
-        img{
-            width: 200px;
-            height: 150px;
-        }
-    }
+       margin-left: 25%;
+       
+   }
 }
