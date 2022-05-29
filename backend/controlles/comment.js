@@ -36,10 +36,12 @@ exports.updateComment = (req, res, next) => {
         if (req.file) {
           if (comment.image_url != null) {
             const filename = comment.image_url.split("/images")[1]; //le nom de l'image a supprimer
-            fs.unlink(`image/${filename}`, function (error) {
-              //supression de l'ancienne image
+            //supression de l'ancienne image
+            fs.unlink(`images/${filename}`, (error) => {
               if (error) {
-                throw error;
+                console.log(error);
+              } else {
+                console.log("file deleted!");
               }
             });
           }

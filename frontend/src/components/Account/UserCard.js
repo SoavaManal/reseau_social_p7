@@ -41,6 +41,7 @@ const UserCard = ({ user }) => {
 
   useEffect(() => {
     isAdmin();
+    // eslint-disable-next-line
   }, []);
   return (
     <div className="card">

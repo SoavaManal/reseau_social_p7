@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Comment from "./Comment";
 import {
-  faDeleteLeft,
   faFileImage,
   faMessage,
   faPen,
   faThumbsUp,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 
 const ReadPost = () => {
@@ -31,6 +31,7 @@ const ReadPost = () => {
       })
       .catch((error) => console.log(error));
   };
+
   const updatePost = (id) => {
     if (updateContent || imagePut) {
       if (updateContent) {
@@ -46,7 +47,7 @@ const ReadPost = () => {
         })
           .then((res) => {
             setPut(res.data);
-            //allPosts();
+            allPosts();
           })
           .catch((error) => {
             console.log(error);
@@ -66,6 +67,7 @@ const ReadPost = () => {
           .then((res) => {
             setPut(res.data);
             allPosts();
+            console.log(put);
           })
           .catch((error) => {
             console.log(error);
@@ -85,7 +87,7 @@ const ReadPost = () => {
         })
           .then((res) => {
             setPut(res.data);
-            //allPosts();
+            allPosts();
           })
           .catch((error) => {
             console.log(error);
@@ -109,6 +111,7 @@ const ReadPost = () => {
     })
       .then((res) => {
         setUser(res.data);
+        console.log(res.data);
       })
       .catch((error) => console.log(error));
   };
@@ -146,13 +149,14 @@ const ReadPost = () => {
   useEffect(() => {
     getProfil();
     allPosts();
+    // eslint-disable-next-line
   }, []);
   return (
     <div>
-      {post == null
+      {post === null
         ? "loading"
         : post.map((post) => (
-            <div className="card-post" key={post.id}>
+            <div className="card-post">
               <div className="flex-space">
                 <div className="post-profil">
                   <img
@@ -178,9 +182,9 @@ const ReadPost = () => {
                   </div>
                   <div>
                     {(user && user.id === post.userId) ||
-                    (user && user.isAdmin === 1) ? (
+                    (user && user.isAdmin === true) ? (
                       <button onClick={() => deletePost(post.id)}>
-                        <FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>
                       </button>
                     ) : (
                       ""
@@ -217,13 +221,18 @@ const ReadPost = () => {
               )}
 
               {post.image_url ? (
-                <img src={post.image_url} className="post-img" alt="post" />
+                <img src={post.image_url} id="post-img" alt="post" />
               ) : (
                 ""
               )}
 
               <ul>
-                <li className="post-barre " onClick={() => likePost(post.id)}>
+                <li
+                  className="post-barre "
+                  onClick={() => {
+                    likePost(post.id);
+                  }}
+                >
                   <p>{post.likes === 0 ? "" : post.likes}</p>
                   <FontAwesomeIcon icon={faThumbsUp}></FontAwesomeIcon>
                 </li>
@@ -232,11 +241,13 @@ const ReadPost = () => {
                   id="readComment"
                   onClick={() => setShowComment(!showComment)}
                 >
-                  <FontAwesomeIcon icon={faMessage}></FontAwesomeIcon>
+                  <FontAwesomeIcon
+                    icon={faMessage}
+                    className={showComment ? "like" : "dislike"}
+                  ></FontAwesomeIcon>
                 </li>
               </ul>
-
-              {showComment && <Comment post={post} />}
+              {showComment && <Comment post={post} key={post.id} />}
             </div>
           ))}
     </div>

@@ -16,15 +16,15 @@ const Navigation = (props) => {
   const [users, setUsers] = useState(props.users);
 
   const handelModals = (e) => {
-    if (e.target.id == "acceuil") {
+    if (e.target.id === "acceuil") {
       setAcceuil(true);
       setProfil(false);
       setUsers(false);
-    } else if (e.target.id == "profil") {
+    } else if (e.target.id === "profil") {
       setAcceuil(false);
       setProfil(true);
       setUsers(false);
-    } else if (e.target.id == "users") {
+    } else if (e.target.id === "users") {
       setAcceuil(false);
       setProfil(false);
       setUsers(true);

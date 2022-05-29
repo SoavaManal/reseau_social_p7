@@ -30,10 +30,11 @@ exports.updatePost = (req, res, next) => {
       if (req.file) {
         if (post.image_url != null) {
           const filename = post.image_url.split("/images")[1]; //le nom de l'image a supprimer
-          fs.unlink(`images/${filename}`, function (error) {
-            //supression de l'ancienne image
+          fs.unlink(`images/${filename}`, (error) => {
             if (error) {
-              throw error;
+              console.log(error);
+            } else {
+              console.log("file deleted!");
             }
           });
         }
@@ -98,8 +99,8 @@ exports.readAllPost = (req, res, next) => {
     .findAll({
       include: [
         {
-          model: models.comment,
-          attributes: ["content", "image_url"],
+          model: models.usersliked,
+          attributes: ["userId"],
         },
         {
           model: models.user,
@@ -109,27 +110,7 @@ exports.readAllPost = (req, res, next) => {
     })
     .then((post) => {
       if (post) {
-        res.status(200).json(post);
-      } else {
-        res.status(404).json({ error: "no messages found" });
-      }
-    })
-    .catch((error) => res.status(500).json({ error }));
-};
-exports.readOnePost = (req, res, next) => {
-  models.post
-    .findOne({
-      where: { id: req.params.id },
-      include: [
-        {
-          model: models.user,
-          attributes: ["firstName", "lastName"],
-        },
-      ],
-    })
-    .then((post) => {
-      if (post) {
-        res.status(200).json(post);
+        res.status(200).json(post.reverse());
       } else {
         res.status(404).json({ error: "no messages found" });
       }

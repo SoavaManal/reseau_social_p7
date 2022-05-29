@@ -1,0 +1,12 @@
+.error-page{
+    background-color: $color-secondary;
+    padding: 30px;
+    width: 50%;
+    border-radius: 5px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 40px;
+    img{
+        filter:drop-shadow(5px 10px 2px $color-2);
+    }
+}

@@ -2,10 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faDeleteLeft,
+  faTrashCan,
   faPaperPlane,
   faPen,
-  faImage,
   faFileImage,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -50,6 +49,8 @@ const Comment = ({ post }) => {
         .then(() => {
           setSendComment(true);
           readComment();
+          setContent("");
+          console.log(sendComment);
         })
         .catch((error) => console.log(error));
     } else {
@@ -72,7 +73,7 @@ const Comment = ({ post }) => {
         })
           .then((res) => {
             setUpdate(res.data);
-            console.log("commentaire modifié", update);
+            readComment();
           })
           .catch((error) => console.log(error));
       }
@@ -89,8 +90,8 @@ const Comment = ({ post }) => {
         })
           .then((res) => {
             setUpdate(res.data);
-            console.log("commentaire modifié");
             readComment();
+            console.log(update);
           })
           .catch((error) => console.log(error));
       }
@@ -108,7 +109,6 @@ const Comment = ({ post }) => {
         })
           .then((res) => {
             setUpdate(res.data);
-            console.log("commentaire modifié");
             readComment();
           })
           .catch((error) => console.log(error));
@@ -153,6 +153,7 @@ const Comment = ({ post }) => {
   useEffect(() => {
     getProfil();
     readComment(post.id);
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -174,7 +175,6 @@ const Comment = ({ post }) => {
                 icon={faPaperPlane}
                 className="comment-icons"
                 onClick={() => {
-                  console.log(sendComment);
                   createComment(post.id);
                 }}
               ></FontAwesomeIcon>
@@ -185,7 +185,7 @@ const Comment = ({ post }) => {
         </div>
         <div>
           <label htmlFor="file" className="label-file">
-            <FontAwesomeIcon icon={faImage}></FontAwesomeIcon>
+            <FontAwesomeIcon icon={faFileImage}></FontAwesomeIcon>
           </label>
           <input
             type="file"
@@ -194,35 +194,83 @@ const Comment = ({ post }) => {
           />
         </div>
       </div>
-      <div className="comment" key={comment.id}>
+      <div className="comment">
         {comment
           ? comment.map((comment) => (
-              <>
+              <div key={comment.id}>
                 {post && post.id === comment.postId ? (
                   <>
                     <div className="flex">
-                      <img
-                        src={comment.user.image}
-                        alt="profil-pic"
-                        className="profil-pic"
-                      />
-                      <h4>{comment.user.firstName}</h4>
+                      <div className="flex">
+                        <img
+                          src={comment.user.image}
+                          alt="profil-pic"
+                          className="profil-pic"
+                        />
+                        <h4>{comment.user.firstName}</h4>
+                      </div>
+                      <div className="flex">
+                        {user && user.id === comment.userId ? (
+                          <button
+                            onClick={() => updateComment(post.id, comment.id)}
+                          >
+                            <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                        {(user && user.id === comment.userId) ||
+                        (user && user.isAdmin === true) ? (
+                          <button
+                            onClick={() => deleteComment(post.id, comment.id)}
+                          >
+                            <FontAwesomeIcon
+                              icon={faTrashCan}
+                            ></FontAwesomeIcon>
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex">
                       {user && user.id === comment.userId ? (
-                        <input type="text" defaultValue={comment.content} />
+                        <>
+                          <input
+                            type="text"
+                            defaultValue={comment.content}
+                            onChange={(e) => setContenteUp(e.target.value)}
+                          />
+                          <label htmlFor="file" className="label-file">
+                            <FontAwesomeIcon
+                              icon={faFileImage}
+                            ></FontAwesomeIcon>
+                          </label>
+                          <input
+                            type="file"
+                            if="file"
+                            onChange={(e) => setImageUp(e.target.files[0])}
+                          />
+                        </>
                       ) : (
                         <p>{comment.content}</p>
                       )}
                       <p className="date">{comment.createdAt.split("T")[0]}</p>
                     </div>
-                    <img
-                      src={comment.image_url ? comment.image_url : ""}
-                      alt={comment.image_url ? "commentaire-pic" : ""}
-                    />
+                    {comment.image_url ? (
+                      <img
+                        src={comment.image_url}
+                        alt="commentaire-pic"
+                        className="comment-img"
+                      />
+                    ) : (
+                      ""
+                    )}
                   </>
                 ) : (
                   ""
                 )}
-              </>
+              </div>
             ))
           : ""}
       </div>

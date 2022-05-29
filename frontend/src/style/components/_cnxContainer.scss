@@ -1,11 +1,11 @@
 .connection-container {
-    border: 2px solid $color-pink;
+    border: 2px solid $color-secondary;
     border-radius: 15px;
     width: 400px;
     margin:   auto ;
     padding: 20px 0;
     text-align: center;
-    background-color: $color-pink;
+    background-color: $color-secondary;
     h3 {
       padding: 10px 0 15px;
     }
@@ -23,7 +23,7 @@
       // border:0;
 
       &:focus {
-        box-shadow: 0 0 3px rgba(51, 51, 51, 0.2);
+        box-shadow: 0 0 3px #4E5166;
       }
     }
     input[type=submit] {
@@ -33,7 +33,7 @@
   
 }
 .error{
-  color:red;
+  color:$color-primary;
   padding-top:15px;
 }
 .success{

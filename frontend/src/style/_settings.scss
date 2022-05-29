@@ -4,11 +4,11 @@
   }
   
   $font-1: "font-1", sans-serif;
-  $color-orange:rgb(255, 37, 0);
-  $color-pink: rgb(254, 231, 240);
+  $color-primary: #FD2D01;
+  $color-secondary: #fdeeee;
   $color-1: #ff7b77;
   $color-2: #ffd0c4;
-  $shadow: rgb(219, 218, 218);
+  $shadow:  #4E5166;
 
   body{
     max-width: 1200px ;
@@ -16,7 +16,7 @@
     margin-right: auto;
       font-family: $font-1;
       color: rgb(45, 36, 30);
-      background: url("../../public/images/solidarite.jpg") no-repeat;
+      background: url("../../public/images/solidarite.jpg") repeat-y;
       background-size: 100%;  
        @media(max-width:510px) {
          background:none;
@@ -42,7 +42,7 @@
       font-weight: bold;
     }
     .active-btn {
-      color: $color-orange;
+      color: $color-primary;
     
     }
   }
@@ -92,9 +92,9 @@ input[type="file"] {
 
 h1{
   text-align: center;
-  color: $color-orange;
+  color: $color-primary;
 }
-h4{
+h4,h3{
   text-transform: capitalize;
 }
 .right-container{

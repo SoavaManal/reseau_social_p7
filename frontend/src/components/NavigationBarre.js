@@ -23,6 +23,7 @@ const NavigationBarre = () => {
   };
   useEffect(() => {
     getProfil();
+    // eslint-disable-next-line
   }, []);
   return (
     <>
@@ -34,13 +35,7 @@ const NavigationBarre = () => {
             className="logo-acceuil"
           />
           <div className="navigation">
-            <img
-              src={user.image ? user.image : "/images/anonyme.png"}
-              alt="profil"
-              className="navigation-img"
-            />
-
-            <h4>Bienvenue {user.firstName}</h4>
+            <h3>Bienvenue {user && user.firstName}</h3>
           </div>
           <Logout />
         </div>

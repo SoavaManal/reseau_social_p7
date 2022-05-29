@@ -2,12 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const Profil = () => {
-  const getToken = localStorage.getItem("jwt");
-  const token = "Bearer " + getToken;
+  const token = "Bearer " + localStorage.getItem("jwt");
   const [user, setUser] = useState();
   const [bio, setBio] = useState("");
   const [image, setImage] = useState();
-  //const[state,SetState]=useState(null)
 
   const getProfil = () => {
     axios({
@@ -70,6 +68,7 @@ const Profil = () => {
 
   useEffect(() => {
     getProfil();
+    // eslint-disable-next-line
   }, []);
 
   return user == null ? (

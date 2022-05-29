@@ -158,10 +158,11 @@ exports.updateUserInfo = (req, res, next) => {
       if (req.file) {
         if (user.image !== null) {
           const filename = user.image.split("/images")[1]; //le nom de l'image a supprimer
-          fs.unlink(`images/${filename}`, function (error) {
-            //supression de l'ancienne image
+          fs.unlink(`images/${filename}`, (error) => {
             if (error) {
-              throw error;
+              console.log(error);
+            } else {
+              console.log("file deleted!");
             }
           });
         }

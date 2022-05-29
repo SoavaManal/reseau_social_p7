@@ -25,6 +25,7 @@ const Users = () => {
 
   useEffect(() => {
     getUsers();
+    // eslint-disable-next-line
   }, []);
   return (
     <div className="right-container">
