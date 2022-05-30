@@ -44,7 +44,7 @@ const UserCard = ({ user }) => {
     // eslint-disable-next-line
   }, []);
   return (
-    <div className="card">
+    <ul className="card">
       <li>
         <img
           src={user.image ? user.image : "/images/anonyme.png"}
@@ -63,7 +63,7 @@ const UserCard = ({ user }) => {
           ""
         )}
       </div>
-    </div>
+    </ul>
   );
 };
 

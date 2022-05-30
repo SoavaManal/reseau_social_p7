@@ -50,7 +50,7 @@
 textarea {
   //resize: none;
   border-radius: 20px;
-  width: 270px;
+  width: 90%;
   //height: 30px;
   font-size: 1em;
   font-family: $font-1;
@@ -99,7 +99,11 @@ h4,h3{
 }
 .right-container{
   margin-left: 8%;
-  margin-top: -150px;
+  margin-top: -170px;
+  @media (max-width:750px){
+    margin-top: 0px;
+    margin-left:0px;
+  }
 }
 .flex{
   display: flex;
@@ -123,11 +127,19 @@ label {
 }
 p{
   text-align: center;
+  margin: 10px;
 }
 .date{
-  color:#A9A9A9;
-  padding-right:5px;
-  font-size: 12px;
+  &-post{
+    color:#4E5166;
+    padding-right:20px;
+    font-size: 20px;
+  }
+  &-comment{
+    color:#4E5166;
+    padding-right:5px;
+    font-size: 12px;
+  }
 }
 .profil-pic{
   width: 55px;
@@ -135,3 +147,11 @@ p{
   border-radius: 20px;
   padding: 10px;
 }
+.right{
+  float: right;
+  padding-right: 15px;
+  @media (max-width:500px){
+    float: none;
+  }
+}
+

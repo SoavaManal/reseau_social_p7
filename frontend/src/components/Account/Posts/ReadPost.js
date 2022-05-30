@@ -34,65 +34,28 @@ const ReadPost = () => {
 
   const updatePost = (id) => {
     if (updateContent || imagePut) {
+      let formData = new FormData();
       if (updateContent) {
-        let formData = new FormData();
         formData.append("content", updateContent);
-        axios({
-          method: "put",
-          url: `http://localhost:3000/api/posts/${id}`,
-          headers: {
-            Authorization: token,
-          },
-          data: formData,
-        })
-          .then((res) => {
-            setPut(res.data);
-            allPosts();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
       }
       if (imagePut) {
-        let formData = new FormData();
         formData.append("image", imagePut);
-        axios({
-          method: "put",
-          url: `http://localhost:3000/api/posts/${id}`,
-          headers: {
-            Authorization: token,
-          },
-          data: formData,
-        })
-          .then((res) => {
-            setPut(res.data);
-            allPosts();
-            console.log(put);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
       }
-      if (updateContent && imagePut) {
-        let formData = new FormData();
-        formData.append("content", updateContent);
-        formData.append("image", imagePut);
-        axios({
-          method: "put",
-          url: `http://localhost:3000/api/posts/${id}`,
-          headers: {
-            Authorization: token,
-          },
-          data: formData,
+      axios({
+        method: "put",
+        url: `http://localhost:3000/api/posts/${id}`,
+        headers: {
+          Authorization: token,
+        },
+        data: formData,
+      })
+        .then((res) => {
+          setPut(res.data);
+          allPosts();
         })
-          .then((res) => {
-            setPut(res.data);
-            allPosts();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       alert("Aucun modification apporter!");
     }
@@ -111,26 +74,27 @@ const ReadPost = () => {
     })
       .then((res) => {
         setUser(res.data);
-        console.log(res.data);
       })
       .catch((error) => console.log(error));
   };
-  const deletePost = (id) => {
-    if (window.confirm("Voulez-Vous supprimer le Post?")) {
+
+  const deletePost = (postId) => {
+    if (window.confirm("Voulez-vous supprimer ce Post?")) {
       axios({
         method: "delete",
-        url: `http://localhost:3000/api/posts/${id}`,
+        url: `http://localhost:3000/api/posts/${postId}`,
         headers: {
           Authorization: token,
         },
       })
         .then(() => {
-          console.log("post supprimé");
+          console.log("post Supprimé");
           allPosts();
         })
         .catch((error) => console.log(error));
     }
   };
+
   const likePost = (id) => {
     axios({
       method: "post",
@@ -156,9 +120,9 @@ const ReadPost = () => {
       {post === null
         ? "loading"
         : post.map((post) => (
-            <div className="card-post">
-              <div className="flex-space">
-                <div className="post-profil">
+            <li className="card-post" key={post.id}>
+              <div className="flex">
+                <div className="flex">
                   <img
                     src={
                       post.user.image ? post.user.image : "/images/anonyme.png"
@@ -170,62 +134,63 @@ const ReadPost = () => {
                     {post.user.firstName} {post.user.lastName}
                   </h3>
                 </div>
-                <div className="flex">
-                  <div>
-                    {user && user.id === post.userId ? (
-                      <button onClick={() => updatePost(post.id)} id="modify">
-                        <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
-                      </button>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div>
-                    {(user && user.id === post.userId) ||
-                    (user && user.isAdmin === true) ? (
-                      <button onClick={() => deletePost(post.id)}>
-                        <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>
-                      </button>
-                    ) : (
-                      ""
-                    )}
-                  </div>
+                <div>
+                  <p className="date-post">{post.createdAt.split("T")[0]}</p>
                 </div>
               </div>
-              {user.id !== post.userId ? (
-                <p>{post.content}</p>
-              ) : (
-                <>
-                  <textarea
-                    defaultValue={post.content}
-                    onChange={(e) => {
-                      setUpdateContent(e.target.value);
-                      console.log(e.target.value);
-                    }}
-                  ></textarea>
-                  <label htmlFor="file" className="label-file">
-                    <FontAwesomeIcon
-                      className="icons"
-                      icon={faFileImage}
-                    ></FontAwesomeIcon>
-                  </label>
-                  <input
-                    id="file"
-                    type="file"
-                    name="file"
-                    title=" "
-                    accept=".jpg, .jpeg, .png"
-                    onChange={(e) => setImagePut(e.target.files[0])}
-                  />
-                </>
-              )}
+              <div className="right">
+                {user && user.id === post.userId ? (
+                  <button onClick={() => updatePost(post.id)} id="modify">
+                    <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
+                  </button>
+                ) : (
+                  ""
+                )}
 
-              {post.image_url ? (
-                <img src={post.image_url} id="post-img" alt="post" />
-              ) : (
-                ""
-              )}
-
+                {user && (user.id === post.userId || user.isAdmin === true) ? (
+                  <button onClick={() => deletePost(post.id)}>
+                    <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div>
+                {user && user.id !== post.userId ? (
+                  <p>{post.content}</p>
+                ) : (
+                  <>
+                    <textarea
+                      defaultValue={post.content}
+                      onChange={(e) => {
+                        setUpdateContent(e.target.value);
+                        console.log(e.target.value);
+                      }}
+                    ></textarea>
+                    <label htmlFor="file" className="label-file">
+                      <FontAwesomeIcon
+                        className="icons"
+                        icon={faFileImage}
+                      ></FontAwesomeIcon>
+                    </label>
+                    <input
+                      id="file"
+                      type="file"
+                      name="file"
+                      title=" "
+                      accept=".jpg, .jpeg, .png"
+                      onChange={(e) => setImagePut(e.target.files[0])}
+                    />
+                  </>
+                )}
+              </div>
+              <div>
+                {post.image_url ? (
+                  <img src={post.image_url} id="post-img" alt="post" />
+                ) : (
+                  ""
+                )}
+              </div>
               <ul>
                 <li
                   className="post-barre "
@@ -233,9 +198,19 @@ const ReadPost = () => {
                     likePost(post.id);
                   }}
                 >
-                  <p>{post.likes === 0 ? "" : post.likes}</p>
-                  <FontAwesomeIcon icon={faThumbsUp}></FontAwesomeIcon>
+                  <div className="flex">
+                    <p>{post.likes === 0 ? "" : post.likes}</p>
+                    <FontAwesomeIcon
+                      icon={faThumbsUp}
+                      className={
+                        post.userslikeds.find((like) => like.userId === user.id)
+                          ? "like"
+                          : "dislike"
+                      }
+                    ></FontAwesomeIcon>
+                  </div>
                 </li>
+
                 <li
                   className="post-barre"
                   id="readComment"
@@ -248,7 +223,7 @@ const ReadPost = () => {
                 </li>
               </ul>
               {showComment && <Comment post={post} key={post.id} />}
-            </div>
+            </li>
           ))}
     </div>
   );

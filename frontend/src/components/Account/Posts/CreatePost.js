@@ -45,28 +45,12 @@ const CreatePost = () => {
   };
 
   const userPost = () => {
-    if (content && imagePost) {
-      let formData = new FormData();
-      formData.append("content", content);
-      formData.append("image", imagePost);
-      axios({
-        method: "post",
-        url: `http://localhost:3000/api/posts/`,
-        headers: {
-          Authorization: token,
-        },
-        data: formData,
-      })
-        .then((res) => {
-          setSubmitPost(res.data);
-          allPosts();
-          console.log(submitPost);
-        })
-        .catch((error) => console.log(error));
-    }
     if (content) {
       let formData = new FormData();
       formData.append("content", content);
+      if (imagePost) {
+        formData.append("image", imagePost);
+      }
       axios({
         method: "post",
         url: `http://localhost:3000/api/posts/`,
@@ -85,16 +69,16 @@ const CreatePost = () => {
     }
   };
 
-  const cancelPost = () => {
-    setContent("");
-    setImagePost("");
-  };
+  // const cancelPost = () => {
+  //   setContent("");
+  //   setImagePost("");
+  // };
 
-  const handelPost = () => {
-    userPost();
-    allPosts(true);
-    cancelPost();
-  };
+  // const handelPost = async () => {
+  //   userPost();
+  //   allPosts();
+  //   cancelPost();
+  // };
 
   useEffect(() => {
     getProfil();
@@ -129,7 +113,7 @@ const CreatePost = () => {
             </div>
             <button
               onClick={() => {
-                handelPost();
+                userPost();
               }}
             >
               <FontAwesomeIcon icon={faPaperPlane}></FontAwesomeIcon>

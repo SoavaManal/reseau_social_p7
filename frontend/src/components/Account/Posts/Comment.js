@@ -154,7 +154,7 @@ const Comment = ({ post }) => {
     getProfil();
     readComment(post.id);
     // eslint-disable-next-line
-  }, []);
+  }, [post.id]);
 
   return (
     <div>
@@ -166,11 +166,21 @@ const Comment = ({ post }) => {
                 <img src={user.image} alt="profil-pic" className="profil-pic" />
                 <h4>{user.firstName}</h4>
               </div>
-              <input
-                type="text"
+              <textarea
+                className="comment-txt"
                 placeholder="Ajouter un commentaire..."
                 onChange={(e) => setContent(e.target.value)}
-              />
+              ></textarea>
+              <div>
+                <label htmlFor="file" className="label-file">
+                  <FontAwesomeIcon icon={faFileImage}></FontAwesomeIcon>
+                </label>
+                <input
+                  type="file"
+                  id="file"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+              </div>
               <FontAwesomeIcon
                 icon={faPaperPlane}
                 className="comment-icons"
@@ -182,16 +192,6 @@ const Comment = ({ post }) => {
           ) : (
             ""
           )}
-        </div>
-        <div>
-          <label htmlFor="file" className="label-file">
-            <FontAwesomeIcon icon={faFileImage}></FontAwesomeIcon>
-          </label>
-          <input
-            type="file"
-            id="file"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
         </div>
       </div>
       <div className="comment">
@@ -255,7 +255,9 @@ const Comment = ({ post }) => {
                       ) : (
                         <p>{comment.content}</p>
                       )}
-                      <p className="date">{comment.createdAt.split("T")[0]}</p>
+                      <p className="date-comment">
+                        {comment.createdAt.split("T")[0]}
+                      </p>
                     </div>
                     {comment.image_url ? (
                       <img

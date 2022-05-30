@@ -66,7 +66,7 @@ exports.deletePost = (req, res, next) => {
     }
     if (post.userId == req.auth.userId || req.auth.isAdmin == 1) {
       //nom du fichier à supprimer
-      if (post.image_url != null) {
+      if (post.image_url !== null) {
         const filename = post.image_url.split("/images")[1];
         fs.unlink(`images/${filename}`, () => {
           post

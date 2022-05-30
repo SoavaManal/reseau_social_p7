@@ -58,11 +58,10 @@ const Navigation = (props) => {
             id="users"
           ></FontAwesomeIcon>
         </div>
-
-        {acceuil && <Acceuil />}
-        {profil && <Profil />}
-        {users && <Users />}
       </div>
+      {acceuil && <Acceuil />}
+      {profil && <Profil />}
+      {users && <Users />}
     </>
   );
 };
