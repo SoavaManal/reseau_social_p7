@@ -33,6 +33,10 @@ const Comment = ({ post }) => {
       .catch((error) => console.log(error));
   };
 
+  const handleComment = (e) => {
+    setContent(e.target.value);
+  };
+
   const createComment = (id) => {
     if (content || image) {
       let formData = new FormData();
@@ -50,6 +54,7 @@ const Comment = ({ post }) => {
           setSendComment(true);
           readComment();
           setContent("");
+          setImageUp("");
           console.log(sendComment);
         })
         .catch((error) => console.log(error));
@@ -169,7 +174,8 @@ const Comment = ({ post }) => {
               <textarea
                 className="comment-txt"
                 placeholder="Ajouter un commentaire..."
-                onChange={(e) => setContent(e.target.value)}
+                onChange={handleComment}
+                value={content}
               ></textarea>
               <div>
                 <label htmlFor="file" className="label-file">

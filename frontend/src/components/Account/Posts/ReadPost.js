@@ -8,6 +8,7 @@ import {
   faPen,
   faThumbsUp,
   faTrashCan,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
 const ReadPost = () => {
@@ -18,6 +19,11 @@ const ReadPost = () => {
   const [post, setPost] = useState([]);
   const [put, setPut] = useState(false);
   const [showComment, setShowComment] = useState(false);
+  const [content, setContent] = useState("");
+  const [imagePost, setImagePost] = useState();
+  const [submitPost, setSubmitPost] = useState();
+
+  //Get All Posts
   const allPosts = () => {
     axios({
       method: "get",
@@ -31,7 +37,39 @@ const ReadPost = () => {
       })
       .catch((error) => console.log(error));
   };
+  const handlePostContent = (e) => {
+    setContent(e.target.value);
+  };
 
+  //create Post
+  const createPost = () => {
+    if (content) {
+      let formData = new FormData();
+      formData.append("content", content);
+      if (imagePost) {
+        formData.append("image", imagePost);
+      }
+      axios({
+        method: "post",
+        url: `http://localhost:3000/api/posts/`,
+        headers: {
+          Authorization: token,
+        },
+        data: formData,
+      })
+        .then((res) => {
+          setSubmitPost(res.data);
+          allPosts();
+          setContent("");
+          setImagePost("");
+        })
+        .catch((error) => console.log(error));
+    } else {
+      alert("Veuillez entrer un message");
+    }
+  };
+
+  //update post
   const updatePost = (id) => {
     if (updateContent || imagePut) {
       let formData = new FormData();
@@ -61,6 +99,7 @@ const ReadPost = () => {
     }
   };
 
+  //get Profil user
   const getProfil = () => {
     axios({
       method: "GET",
@@ -78,6 +117,7 @@ const ReadPost = () => {
       .catch((error) => console.log(error));
   };
 
+  //delete post
   const deletePost = (postId) => {
     if (window.confirm("Voulez-vous supprimer ce Post?")) {
       axios({
@@ -95,6 +135,7 @@ const ReadPost = () => {
     }
   };
 
+  //like or dislike
   const likePost = (id) => {
     axios({
       method: "post",
@@ -117,6 +158,45 @@ const ReadPost = () => {
   }, []);
   return (
     <div>
+      <div className="card-post">
+        {user && post ? (
+          <>
+            <div className="flex">
+              <img src={user.image} alt="user-pic" />
+              <textarea
+                placeholder="Quoi de neuf ?"
+                id="post"
+                onChange={handlePostContent}
+                value={content}
+              ></textarea>
+              <div>
+                <label htmlFor="file" className="label-file">
+                  <FontAwesomeIcon
+                    className="icons"
+                    icon={faFileImage}
+                  ></FontAwesomeIcon>
+                </label>
+                <input
+                  type="file"
+                  name="file"
+                  id="file"
+                  title=" "
+                  onChange={(e) => setImagePost(e.target.files[0])}
+                />
+              </div>
+              <button
+                onClick={() => {
+                  createPost();
+                }}
+              >
+                <FontAwesomeIcon icon={faPaperPlane}></FontAwesomeIcon>
+              </button>
+            </div>
+          </>
+        ) : (
+          ""
+        )}
+      </div>
       {post === null
         ? "loading"
         : post.map((post) => (
