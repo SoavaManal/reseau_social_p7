@@ -52,7 +52,7 @@ const Comment = ({ post }) => {
       })
         .then(() => {
           setSendComment(true);
-          readComment();
+          readComment(post.id);
           setContent("");
           setImageUp("");
           console.log(sendComment);
@@ -65,59 +65,30 @@ const Comment = ({ post }) => {
 
   const updateComment = (postId, commentId) => {
     if (contentUp || imageUp) {
+      let formData = new FormData();
       if (contentUp) {
-        let formData = new FormData();
         formData.append("content", contentUp);
-        axios({
-          method: "put",
-          url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
-          headers: {
-            Authorization: token,
-          },
-          data: formData,
-        })
-          .then((res) => {
-            setUpdate(res.data);
-            readComment();
-          })
-          .catch((error) => console.log(error));
       }
       if (imageUp) {
-        let formData = new FormData();
         formData.append("image", imageUp);
-        axios({
-          method: "put",
-          url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
-          headers: {
-            Authorization: token,
-          },
-          data: formData,
-        })
-          .then((res) => {
-            setUpdate(res.data);
-            readComment();
-            console.log(update);
-          })
-          .catch((error) => console.log(error));
       }
-      if (contentUp && imageUp) {
-        let formData = new FormData();
+      if (content && image) {
         formData.append("content", contentUp);
         formData.append("image", imageUp);
-        axios({
-          method: "put",
-          url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
-          headers: {
-            Authorization: token,
-          },
-          data: formData,
-        })
-          .then((res) => {
-            setUpdate(res.data);
-            readComment();
-          })
-          .catch((error) => console.log(error));
       }
+      axios({
+        method: "put",
+        url: `http://localhost:3000/api/posts/${postId}/comment/${commentId}`,
+        headers: {
+          Authorization: token,
+        },
+        data: formData,
+      })
+        .then((res) => {
+          setUpdate(res.data);
+          readComment(post.id);
+        })
+        .catch((error) => console.log(error));
     } else {
       alert("Aucun modification apporter!");
     }
@@ -134,7 +105,7 @@ const Comment = ({ post }) => {
       })
         .then(() => {
           console.log("commentaire supprimer");
-          readComment();
+          readComment(post.id);
         })
         .catch((error) => console.log(error));
     }
@@ -164,46 +135,53 @@ const Comment = ({ post }) => {
   return (
     <div>
       <div className="comment">
-        <div className="flex">
-          {user ? (
-            <>
-              <div className="flex">
-                <img src={user.image} alt="profil-pic" className="profil-pic" />
-                <h4>{user.firstName}</h4>
+        {user ? (
+          <>
+            <div className="flex">
+              <img src={user.image} alt="profil-pic" className="profil-pic" />
+              <h3>
+                {user.firstName} {user.lastName}
+              </h3>
+              <div className="right">
+                <button
+                  onClick={() => {
+                    createComment(post.id);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    className="comment-icons"
+                  ></FontAwesomeIcon>
+                </button>
               </div>
+            </div>
+
+            <>
               <textarea
                 className="comment-txt"
                 placeholder="Ajouter un commentaire..."
                 onChange={handleComment}
                 value={content}
               ></textarea>
-              <div>
-                <label htmlFor="file" className="label-file">
-                  <FontAwesomeIcon icon={faFileImage}></FontAwesomeIcon>
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={(e) => setImage(e.target.files[0])}
-                />
-              </div>
-              <FontAwesomeIcon
-                icon={faPaperPlane}
-                className="comment-icons"
-                onClick={() => {
-                  createComment(post.id);
-                }}
-              ></FontAwesomeIcon>
+
+              <label htmlFor="file" className="label-file">
+                <FontAwesomeIcon icon={faFileImage}></FontAwesomeIcon>
+              </label>
+              <input
+                type="file"
+                id="file"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
             </>
-          ) : (
-            ""
-          )}
-        </div>
+          </>
+        ) : (
+          ""
+        )}
       </div>
-      <div className="comment">
+      <div>
         {comment
           ? comment.map((comment) => (
-              <div key={comment.id}>
+              <div key={comment.id} className="comment">
                 {post && post.id === comment.postId ? (
                   <>
                     <div className="flex">
@@ -213,7 +191,9 @@ const Comment = ({ post }) => {
                           alt="profil-pic"
                           className="profil-pic"
                         />
-                        <h4>{comment.user.firstName}</h4>
+                        <h3>
+                          {comment.user.firstName} {comment.user.lastName}
+                        </h3>
                       </div>
                       <div className="flex">
                         {user && user.id === comment.userId ? (
@@ -239,14 +219,13 @@ const Comment = ({ post }) => {
                         )}
                       </div>
                     </div>
-                    <div className="flex">
+                    <div>
                       {user && user.id === comment.userId ? (
                         <>
-                          <input
-                            type="text"
+                          <textarea
                             defaultValue={comment.content}
                             onChange={(e) => setContenteUp(e.target.value)}
-                          />
+                          ></textarea>
                           <label htmlFor="file" className="label-file">
                             <FontAwesomeIcon
                               icon={faFileImage}
@@ -261,9 +240,6 @@ const Comment = ({ post }) => {
                       ) : (
                         <p>{comment.content}</p>
                       )}
-                      <p className="date-comment">
-                        {comment.createdAt.split("T")[0]}
-                      </p>
                     </div>
                     {comment.image_url ? (
                       <img

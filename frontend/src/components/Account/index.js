@@ -34,28 +34,22 @@ const Navigation = (props) => {
     <>
       <NavigationBarre />
       <div className="account">
-        <div className="account-icons">
+        <div className="account-icons" id="acceuil" onClick={handelModals}>
           <FontAwesomeIcon
             icon={faHouse}
-            onClick={handelModals}
             className={acceuil ? "navigation-active" : ""}
-            id="acceuil"
           ></FontAwesomeIcon>
         </div>
-        <div className="account-icons">
+        <div className="account-icons" id="profil" onClick={handelModals}>
           <FontAwesomeIcon
             icon={faUser}
-            onClick={handelModals}
             className={profil ? "navigation-active" : ""}
-            id="profil"
           ></FontAwesomeIcon>
         </div>
-        <div className="account-icons">
+        <div className="account-icons" id="users" onClick={handelModals}>
           <FontAwesomeIcon
             icon={faUserGroup}
-            onClick={handelModals}
             className={users ? "navigation-active" : ""}
-            id="users"
           ></FontAwesomeIcon>
         </div>
       </div>

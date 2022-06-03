@@ -18,9 +18,12 @@
       color: rgb(45, 36, 30);
       background: url("../../public/images/solidarite.jpg") repeat-y;
       background-size: 100%;  
-       @media(max-width:510px) {
+       @media(max-width:700px) {
          background:none;
        }
+  }
+  ol{
+    padding: 0px;
   }
   ul {
     display: flex;
@@ -46,11 +49,9 @@
     
     }
   }
-  input,
-textarea {
-  //resize: none;
+  input {
   border-radius: 20px;
-  width: 90%;
+  width: 60%;
   //height: 30px;
   font-size: 1em;
   font-family: $font-1;
@@ -58,6 +59,13 @@ textarea {
   border:0;
 }
 textarea {
+  border-radius: 20px;
+  width: 70%;
+  //height: 30px;
+  font-size: 1em;
+  font-family: $font-1;
+  background: white;
+  border:0;
   &:focus {
     box-shadow: 0 0 4px rgba(0, 22, 44, 0.1);
   }
@@ -120,20 +128,24 @@ label {
   cursor: pointer;
 }
 
-.flex-space{
+.flex-center{
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 p{
   text-align: center;
   margin: 10px;
+  padding-bottom: 10px;
 }
 .date{
   &-post{
     color:#4E5166;
     padding-right:20px;
     font-size: 20px;
+    @media (max-width:700px){
+      font-size: 15px;
+    }
   }
   &-comment{
     color:#4E5166;
@@ -150,8 +162,13 @@ p{
 .right{
   float: right;
   padding-right: 15px;
-  @media (max-width:500px){
-    float: none;
-  }
+ 
 }
-
+.like-number{
+  font-size: 0.8em;
+}
+.flex-wrap{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

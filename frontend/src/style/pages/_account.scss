@@ -17,6 +17,10 @@
         margin: 10px;
         font-size: 27px;
         padding: 10px;
+        @media (max-width:700px){
+            background:none;
+            box-shadow: none;
+        }
     }
 }
 .navigation-active{

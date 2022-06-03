@@ -3,9 +3,9 @@ const jwt = require("jsonwebtoken");
 const models = require("../models");
 const fs = require("fs");
 
-//s'inscrire
+//inscription de l'utilisateur
 exports.signup = (req, res, next) => {
-  //verrifier si un des paramettre non null n'est pas renseigner
+  //verrifier les paramettres non null sont renseignés
   if (
     req.body.firstName === null ||
     req.body.lastName === null ||
@@ -106,7 +106,7 @@ exports.login = (req, res, next) => {
     .catch(() => res.status(500).json({ errors: "can't access the database" }));
 };
 
-//le profil d'utilisateur
+//USER
 exports.getUserInfo = (req, res, next) => {
   models.user
     .findOne({
@@ -131,6 +131,7 @@ exports.getUserInfo = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
+//USERS
 exports.getAllUser = (req, res, next) => {
   models.user
     .findAll({
@@ -140,7 +141,7 @@ exports.getAllUser = (req, res, next) => {
     .catch(() => res.status(400).json({ error: "bad request" }));
 };
 
-//modifier le profile
+//modification du profile
 exports.updateUserInfo = (req, res, next) => {
   var bio = req.body.bio;
   var image = req.file
@@ -188,7 +189,7 @@ exports.deleteUser = (req, res, next) => {
   models.user
     .findOne({ where: { id: req.auth.userId } })
     .then((user) => {
-      if (user.id == req.auth.userId || req.auth.isAdmin == 1) {
+      if (user.id == req.auth.userId) {
         const filename = user.image.split("/images")[1];
         fs.unlink(`images/${filename}`, () => {
           user

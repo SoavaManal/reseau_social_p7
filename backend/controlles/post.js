@@ -1,6 +1,7 @@
 const models = require("../models");
 const fs = require("fs");
 
+//poster un post
 exports.createPost = (req, res, next) => {
   models.user
     .findOne({ where: { id: req.auth.userId } })
@@ -20,6 +21,7 @@ exports.createPost = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+//modification du post
 exports.updatePost = (req, res, next) => {
   models.post
     .findOne({ where: { id: req.params.id } })
@@ -57,18 +59,31 @@ exports.updatePost = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+//suppression du post
 exports.deletePost = (req, res, next) => {
-  models.post.findOne({ where: { id: req.params.id } }).then((post) => {
-    if (!post) {
-      return res.status(404).json({
-        error: new Error("post unexist"),
-      });
-    }
-    if (post.userId == req.auth.userId || req.auth.isAdmin == 1) {
-      //nom du fichier à supprimer
-      if (post.image_url !== null) {
-        const filename = post.image_url.split("/images")[1];
-        fs.unlink(`images/${filename}`, () => {
+  models.post
+    .findOne({ where: { id: req.params.id } })
+    .then((post) => {
+      if (!post) {
+        return res.status(404).json({
+          error: new Error("post unexist"),
+        });
+      }
+      if (post.userId == req.auth.userId || req.auth.isAdmin == 1) {
+        //nom du fichier à supprimer
+        if (post.image_url !== null) {
+          const filename = post.image_url.split("/images")[1];
+          fs.unlink(`images/${filename}`, () => {
+            post
+              .destroy({ where: { id: req.params.id } })
+              .then(() => {
+                res.status(201).json({ message: "Post delete !" });
+              })
+              .catch((error) => {
+                res.status(400).json({ error });
+              });
+          });
+        } else {
           post
             .destroy({ where: { id: req.params.id } })
             .then(() => {
@@ -77,23 +92,15 @@ exports.deletePost = (req, res, next) => {
             .catch((error) => {
               res.status(400).json({ error });
             });
-        });
+        }
       } else {
-        post
-          .destroy({ where: { id: req.params.id } })
-          .then(() => {
-            res.status(201).json({ message: "Post delete !" });
-          })
-          .catch((error) => {
-            res.status(400).json({ error });
-          });
+        return res.status(401).json({ message: "Unauthorized request" });
       }
-    } else {
-      return res.status(401).json({ message: "Unauthorized request" });
-    }
-  });
-  //.catch((error) => res.status(500).json({ error }));
+    })
+    .catch((error) => res.status(500).json({ error }));
 };
+
+//lecture des posts
 exports.readAllPost = (req, res, next) => {
   models.post
     .findAll({

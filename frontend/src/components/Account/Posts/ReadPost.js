@@ -157,19 +157,36 @@ const ReadPost = () => {
     // eslint-disable-next-line
   }, []);
   return (
-    <div>
-      <div className="card-post">
+    <ol>
+      <li className="card-post">
         {user && post ? (
           <>
-            <div className="flex">
-              <img src={user.image} alt="user-pic" />
-              <textarea
-                placeholder="Quoi de neuf ?"
-                id="post"
-                onChange={handlePostContent}
-                value={content}
-              ></textarea>
-              <div>
+            <div className="flex-center">
+              <img
+                src={user.image ? user.image : "/images/anonyme.png"}
+                alt="user-pic"
+                className="card-post-profil"
+              />
+              <h3>Bienvenue {user && user.firstName}</h3>
+            </div>
+            <div>
+              <div className="right">
+                <button
+                  onClick={() => {
+                    createPost();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPaperPlane}></FontAwesomeIcon>
+                </button>
+              </div>
+              <>
+                <textarea
+                  placeholder="Quoi de neuf ?"
+                  id="post"
+                  onChange={handlePostContent}
+                  value={content}
+                ></textarea>
+
                 <label htmlFor="file" className="label-file">
                   <FontAwesomeIcon
                     className="icons"
@@ -183,20 +200,14 @@ const ReadPost = () => {
                   title=" "
                   onChange={(e) => setImagePost(e.target.files[0])}
                 />
-              </div>
-              <button
-                onClick={() => {
-                  createPost();
-                }}
-              >
-                <FontAwesomeIcon icon={faPaperPlane}></FontAwesomeIcon>
-              </button>
+              </>
             </div>
           </>
         ) : (
           ""
         )}
-      </div>
+      </li>
+
       {post === null
         ? "loading"
         : post.map((post) => (
@@ -208,7 +219,7 @@ const ReadPost = () => {
                       post.user.image ? post.user.image : "/images/anonyme.png"
                     }
                     alt="profil"
-                    className="post-profil-img"
+                    className="card-post-profil"
                   />
                   <h3>
                     {post.user.firstName} {post.user.lastName}
@@ -279,10 +290,13 @@ const ReadPost = () => {
                   }}
                 >
                   <div className="flex">
-                    <p>{post.likes === 0 ? "" : post.likes}</p>
+                    <p className="like-number">
+                      {post.likes === 0 ? "" : post.likes}
+                    </p>
                     <FontAwesomeIcon
                       icon={faThumbsUp}
                       className={
+                        post !== null &&
                         post.userslikeds.find((like) => like.userId === user.id)
                           ? "like"
                           : "dislike"
@@ -305,7 +319,7 @@ const ReadPost = () => {
               {showComment && <Comment post={post} key={post.id} />}
             </li>
           ))}
-    </div>
+    </ol>
   );
 };
 
