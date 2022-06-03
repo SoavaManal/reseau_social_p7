@@ -24,12 +24,11 @@ CREATE TABLE IF NOT EXISTS `database_development_projet7`.`users` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email` (`email` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 18
+AUTO_INCREMENT = 18j 
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES ('admin','groupomania','admingroupomania@gmail.com','$2b$10$sKKh8DA0lg0mb6Db.nQdnOZfJaUiB8B5trqbAEOFtcNZj/IhazwUu','Admin du site','http://localhost:3000/images/pngtree-vector-administration-icon-png-image_747092.jpg1653473428643.jpeg',1,2022-05-19 12:12:40,2022-05-25 10:10:28);
+INSERT INTO users VALUES (1,'admin','groupomania','admingroupomania@gmail.com','$2b$10$sKKh8DA0lg0mb6Db.nQdnOZfJaUiB8B5trqbAEOFtcNZj/IhazwUu','Admin du site','http://localhost:3000/images/pngtree-vector-administration-icon-png-image_747092.jpg1653473428643.jpeg','1','2022-05-19 12:12:40','2022-05-25 10:10:28');
 UNLOCK TABLES;
 -- -----------------------------------------------------
 -- Table `database_development_projet7`.`posts`
