@@ -27,12 +27,12 @@
 
 ### USERS
 
-![users action](/role-picture/Aspose.Words.ef4c928e-a0e2-4c14-a978-b76e32652d11.001.png)
+![users action](./role-picture/Aspose.Words.3e10d72a-8933-4d00-859d-4160e98ca6e6.001.png)
 
 ### POSTS
 
-![posts action](/role-picture/Aspose.Words.ef4c928e-a0e2-4c14-a978-b76e32652d11.002.png)
+![posts action](./role-picture/Aspose.Words.3e10d72a-8933-4d00-859d-4160e98ca6e6.002.png)
 
 ### COMMENTS
 
-![comment action](/role-picture/Aspose.Words.ef4c928e-a0e2-4c14-a978-b76e32652d11.003.png)
+![comment action](./role-picture/Aspose.Words.3e10d72a-8933-4d00-859d-4160e98ca6e6.003.png)
